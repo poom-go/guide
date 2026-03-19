@@ -88,91 +88,94 @@
     }
 
     .topbar {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
       gap: 20px;
-      padding: 20px 28px 18px;
+      padding: 22px 28px 20px;
       border-bottom: 1px solid #edf0f4;
       flex-shrink: 0;
       background: #ffffff;
     }
 
-    .topbar-left {
-      min-width: 0;
-      flex: 1;
+    .topbar-center {
+      justify-self: center;
+      width: 100%;
+      max-width: 980px;
     }
 
-    .step-flow {
+    .step-progress {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 18px;
+      width: 100%;
+    }
+
+    .step-item {
       display: flex;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 10px;
+      gap: 18px;
+      flex: 1 1 0;
+      min-width: 0;
     }
 
-    .step-flow-item {
-      display: inline-flex;
+    .step-block {
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 8px;
-      font-size: 17px;
+      justify-content: flex-start;
+      min-width: 0;
+      width: 100%;
+    }
+
+    .step-label {
+      font-size: 19px;
       font-weight: 800;
-      color: #98a2b3;
+      color: #b3bcc8;
+      line-height: 1.2;
+      text-align: center;
+      transition: all 0.2s ease;
       white-space: nowrap;
-      transition: color 0.2s ease;
     }
 
-    .step-flow-item.active {
-      color: #0040d1;
+    .step-status {
+      margin-top: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1;
+      text-align: center;
+      color: #b3bcc8;
+      transition: all 0.2s ease;
+      min-height: 12px;
     }
 
-    .step-flow-item.done {
+    .step-block.done .step-label {
       color: #111827;
     }
 
-    .step-flow-sep {
-      color: #cbd5e1;
-      font-weight: 700;
-      font-size: 16px;
-      line-height: 1;
+    .step-block.done .step-status {
+      color: #111827;
     }
 
-    .step-status-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .step-status-chip {
-      display: inline-flex;
-      align-items: center;
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 800;
-      border: 1px solid #e5e7eb;
-      background: #f8fafc;
-      color: #98a2b3;
-      white-space: nowrap;
-    }
-
-    .step-status-chip.waiting {
-      background: #f8fafc;
-      color: #98a2b3;
-      border-color: #e5e7eb;
-    }
-
-    .step-status-chip.active {
-      background: #eef3ff;
+    .step-block.active .step-label {
       color: #0040d1;
-      border-color: #cfd8ff;
     }
 
-    .step-status-chip.done {
+    .step-block.active .step-status {
+      color: #0040d1;
+    }
+
+    .step-line {
+      flex: 1;
+      min-width: 28px;
+      height: 1px;
+      background: #d8dee8;
+      margin-top: 12px;
+    }
+
+    .step-item.done .step-line {
       background: #0040d1;
-      color: #ffffff;
-      border-color: #0040d1;
     }
 
     .topbar-right {
@@ -262,10 +265,6 @@
       justify-content: center;
       gap: 10px;
       flex-shrink: 0;
-    }
-
-    .bottom-fixed-actions {
-      display: none;
     }
 
     .btn {
@@ -429,36 +428,18 @@
       display: none;
     }
 
-    .help-block + .help-block {
-      margin-top: 14px;
-    }
+    @media (max-width: 1280px) {
+      .step-progress {
+        gap: 12px;
+      }
 
-    .help-card {
-      border: 1px solid #e6ebf2;
-      border-radius: 16px;
-      background: #f8faff;
-      padding: 16px;
-    }
+      .step-item {
+        gap: 12px;
+      }
 
-    .help-card h4 {
-      margin: 0 0 8px;
-      font-size: 15px;
-      font-weight: 800;
-      color: #111827;
-    }
-
-    .help-card p,
-    .help-card li {
-      margin: 0;
-      font-size: 14px;
-      line-height: 1.8;
-      color: #4b5563;
-    }
-
-    .help-card ul,
-    .help-card ol {
-      margin: 8px 0 0;
-      padding-left: 18px;
+      .step-label {
+        font-size: 17px;
+      }
     }
 
     @media (max-width: 1200px) {
@@ -473,6 +454,19 @@
 
       .app-shell {
         height: auto;
+      }
+
+      .topbar {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar-center {
+        justify-self: stretch;
+        max-width: none;
+      }
+
+      .topbar-right {
+        justify-content: flex-end;
       }
 
       .guide-layout {
@@ -507,22 +501,33 @@
         padding-right: 18px;
       }
 
-      .app-header {
-        flex-direction: row;
-        align-items: flex-start;
-      }
-
       .app-title {
         font-size: 22px;
       }
 
-      .topbar {
-        flex-direction: column;
-        align-items: stretch;
+      .step-progress {
+        gap: 8px;
+      }
+
+      .step-item {
+        gap: 8px;
+      }
+
+      .step-label {
+        font-size: 14px;
+      }
+
+      .step-status {
+        font-size: 11px;
+      }
+
+      .step-line {
+        min-width: 12px;
       }
 
       .topbar-right {
         width: 100%;
+        justify-content: stretch;
       }
 
       .topbar-right .btn {
@@ -557,9 +562,8 @@
       </header>
 
       <section class="topbar">
-        <div class="topbar-left">
-          <div class="step-flow" id="stepFlow"></div>
-          <div class="step-status-row" id="stepStatusRow"></div>
+        <div class="topbar-center">
+          <div class="step-progress" id="stepProgress"></div>
         </div>
 
         <div class="topbar-right">
@@ -666,8 +670,7 @@
     let currentStepIndex = 0;
     let currentSlideIndex = 0;
 
-    const stepFlow = document.getElementById("stepFlow");
-    const stepStatusRow = document.getElementById("stepStatusRow");
+    const stepProgress = document.getElementById("stepProgress");
     const leftTitle = document.getElementById("leftTitle");
     const leftContent = document.getElementById("leftContent");
     const rightContent = document.getElementById("rightContent");
@@ -693,40 +696,43 @@
     }
 
     function renderTopbar() {
-      stepFlow.innerHTML = "";
-      stepStatusRow.innerHTML = "";
+      stepProgress.innerHTML = "";
 
       GUIDE_STEPS.forEach((step, index) => {
-        const flowItem = document.createElement("div");
-        let cls = "step-flow-item";
-        if (index < currentStepIndex) cls += " done";
-        if (index === currentStepIndex) cls += " active";
-        flowItem.className = cls;
-        flowItem.textContent = step.shortLabel;
-        stepFlow.appendChild(flowItem);
+        const item = document.createElement("div");
+        item.className = "step-item" + (index < currentStepIndex ? " done" : "");
+
+        const block = document.createElement("div");
+        let blockClass = "step-block";
+        if (index < currentStepIndex) blockClass += " done";
+        if (index === currentStepIndex) blockClass += " active";
+        block.className = blockClass;
+
+        const label = document.createElement("div");
+        label.className = "step-label";
+        label.textContent = step.shortLabel;
+
+        const status = document.createElement("div");
+        status.className = "step-status";
+        if (index < currentStepIndex) {
+          status.textContent = "완료";
+        } else if (index === currentStepIndex) {
+          status.textContent = "진행중";
+        } else {
+          status.textContent = "대기중";
+        }
+
+        block.appendChild(label);
+        block.appendChild(status);
+        item.appendChild(block);
 
         if (index < GUIDE_STEPS.length - 1) {
-          const sep = document.createElement("span");
-          sep.className = "step-flow-sep";
-          sep.textContent = ">";
-          stepFlow.appendChild(sep);
+          const line = document.createElement("div");
+          line.className = "step-line";
+          item.appendChild(line);
         }
 
-        const statusChip = document.createElement("div");
-        let statusClass = "waiting";
-        let statusText = `${step.shortLabel} 대기중`;
-
-        if (index < currentStepIndex) {
-          statusClass = "done";
-          statusText = `${step.shortLabel} 완료`;
-        } else if (index === currentStepIndex) {
-          statusClass = "active";
-          statusText = `${step.shortLabel} 진행중`;
-        }
-
-        statusChip.className = `step-status-chip ${statusClass}`;
-        statusChip.textContent = statusText;
-        stepStatusRow.appendChild(statusChip);
+        stepProgress.appendChild(item);
       });
     }
 
