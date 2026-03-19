@@ -32,7 +32,6 @@
       height: 100vh;
     }
 
-    /* ================= LEFT SIDEBAR ================= */
     .sidebar {
       width: 320px;
       background: #fff;
@@ -154,7 +153,6 @@
       margin-left: 6px;
     }
 
-    /* ================= MAIN ================= */
     .main {
       flex: 1;
       display: flex;
@@ -248,6 +246,12 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
+      animation: fadeInStep 0.25s ease;
+    }
+
+    @keyframes fadeInStep {
+      from { opacity: 0.4; }
+      to { opacity: 1; }
     }
 
     .nav {
@@ -288,30 +292,6 @@
       color: #fff;
     }
 
-    .icon-btn {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      border: 1px solid #d9e0ea;
-      background: #fff;
-      color: #111827;
-      font-size: 20px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .icon-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
-    }
-
-    .icon-btn:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-
     .loading-box {
       width: 100%;
       height: 100%;
@@ -349,7 +329,6 @@
       display: none;
     }
 
-    /* ================= HELP DRAWER ================= */
     .help-overlay {
       position: fixed;
       inset: 0;
@@ -456,6 +435,7 @@
       font-size: 18px;
       line-height: 1;
       flex-shrink: 0;
+      transition: transform 0.2s ease;
     }
 
     .faq-answer {
@@ -528,8 +508,6 @@
 <body>
 
 <div class="app">
-
-  <!-- ================= SIDEBAR ================= -->
   <aside class="sidebar">
     <div class="sidebar-brand">
       <img src="./Primary Logo.png" alt="품고 로고" onerror="this.style.display='none'">
@@ -542,7 +520,6 @@
     <div id="sidebar"></div>
   </aside>
 
-  <!-- ================= MAIN ================= -->
   <section class="main">
     <div class="top">
       <div class="title" id="title">-</div>
@@ -563,15 +540,13 @@
         <div class="viewer" id="right"></div>
 
         <div class="nav">
-          <button class="icon-btn" id="prevSlideBtn" aria-label="이전 화면">‹</button>
-          <button class="icon-btn" id="nextSlideBtn" aria-label="다음 화면">›</button>
+          <button class="btn btn-outline" id="playBtn" type="button" style="display:none;">▶ 재생</button>
         </div>
       </section>
     </div>
   </section>
 </div>
 
-<!-- ================= HELP ================= -->
 <div class="help-overlay" id="helpOverlay"></div>
 
 <aside class="help-drawer" id="helpDrawer" aria-hidden="true">
@@ -580,7 +555,7 @@
       <div class="drawer-kicker">도움말</div>
       <h3 class="drawer-title" id="helpTitle">도움말</h3>
     </div>
-    <button class="icon-btn" id="closeHelpBtn" aria-label="닫기">×</button>
+    <button class="btn btn-outline" id="closeHelpBtn" type="button">닫기</button>
   </div>
 
   <div class="help-drawer-body" id="helpContent">
@@ -648,6 +623,8 @@
   let currentStep = 0;
   let currentItem = 0;
   let currentSlide = 0;
+  let slidePlayTimer = null;
+  let isPlayingSlides = false;
 
   const done = {};
 
@@ -658,8 +635,7 @@
   const rightEl = document.getElementById("right");
   const helpBtn = document.getElementById("helpBtn");
   const nextBtn = document.getElementById("nextBtn");
-  const prevSlideBtn = document.getElementById("prevSlideBtn");
-  const nextSlideBtn = document.getElementById("nextSlideBtn");
+  const playBtn = document.getElementById("playBtn");
 
   const helpOverlay = document.getElementById("helpOverlay");
   const helpDrawer = document.getElementById("helpDrawer");
@@ -679,11 +655,36 @@
     );
   }
 
+  function isStep1Login() {
+    return currentStep === 0 && currentItem === 0;
+  }
+
+  function stopSlidePlay() {
+    if (slidePlayTimer) {
+      clearInterval(slidePlayTimer);
+      slidePlayTimer = null;
+    }
+    isPlayingSlides = false;
+    updatePlayButton();
+  }
+
+  function updatePlayButton() {
+    const item = currentItemData();
+    const canPlay = isStep1Login() && item.right && item.right.length > 1;
+
+    if (!canPlay) {
+      playBtn.style.display = "none";
+      return;
+    }
+
+    playBtn.style.display = "inline-flex";
+    playBtn.textContent = isPlayingSlides ? "⏸ 일시정지" : "▶ 재생";
+  }
+
   function renderSidebar() {
     sidebarEl.innerHTML = "";
 
     STEPS.forEach((step, sIdx) => {
-      const required = step.items.filter(i => i.required);
       const requiredIndices = step.items
         .map((item, iIdx) => ({ item, iIdx }))
         .filter(x => x.item.required);
@@ -691,7 +692,7 @@
       const doneCount = requiredIndices.filter(x => done[`${sIdx}-${x.iIdx}`]).length;
 
       let status = "wait";
-      if (required.length > 0 && doneCount === required.length) status = "done";
+      if (requiredIndices.length > 0 && doneCount === requiredIndices.length) status = "done";
       else if (sIdx === currentStep) status = "ing";
 
       const stepEl = document.createElement("div");
@@ -719,6 +720,7 @@
           </span>
         `;
         itemEl.addEventListener("click", () => {
+          stopSlidePlay();
           currentStep = sIdx;
           currentItem = iIdx;
           currentSlide = 0;
@@ -769,6 +771,16 @@
     progressEl.textContent = `진행률 ${percent}%`;
   }
 
+  async function renderRightOnly() {
+    const item = currentItemData();
+    try {
+      rightEl.innerHTML = `<div class="viewer-frame">${await loadHTML(item.right[currentSlide])}</div>`;
+    } catch (e) {
+      rightEl.innerHTML = `<div class="loading-box">${e.message}</div>`;
+    }
+    updatePlayButton();
+  }
+
   async function render() {
     renderSidebar();
     renderProgress();
@@ -788,10 +800,8 @@
       rightEl.innerHTML = `<div class="loading-box">${e.message}</div>`;
     }
 
-    prevSlideBtn.disabled = !item.right || item.right.length <= 1;
-    nextSlideBtn.disabled = !item.right || item.right.length <= 1;
-
     await renderHelp();
+    updatePlayButton();
 
     if (currentStep === STEPS.length - 1 && currentItem === STEPS[currentStep].items.length - 1) {
       nextBtn.textContent = "가이드 완료";
@@ -804,17 +814,39 @@
     }
   }
 
+  function toggleSlidePlay() {
+    const item = currentItemData();
+    const canPlay = isStep1Login() && item.right && item.right.length > 1;
+    if (!canPlay) return;
+
+    if (isPlayingSlides) {
+      stopSlidePlay();
+      return;
+    }
+
+    isPlayingSlides = true;
+    updatePlayButton();
+
+    slidePlayTimer = setInterval(async () => {
+      const latestItem = currentItemData();
+
+      if (!isStep1Login() || !latestItem.right || latestItem.right.length <= 1) {
+        stopSlidePlay();
+        return;
+      }
+
+      currentSlide = (currentSlide + 1) % latestItem.right.length;
+      await renderRightOnly();
+    }, 1600);
+  }
+
   function goNextContent() {
+    stopSlidePlay();
+
     const item = currentItemData();
 
     if (item.required) {
       done[`${currentStep}-${currentItem}`] = true;
-    }
-
-    if (item.right && currentSlide < item.right.length - 1) {
-      currentSlide++;
-      render();
-      return;
     }
 
     currentSlide = 0;
@@ -835,22 +867,6 @@
     alert("수고하셨습니다! 가이드 확인이 완료되었습니다.");
   }
 
-  function goPrevSlide() {
-    const item = currentItemData();
-    if (!item.right || item.right.length <= 1) return;
-
-    currentSlide = (currentSlide - 1 + item.right.length) % item.right.length;
-    render();
-  }
-
-  function goNextSlide() {
-    const item = currentItemData();
-    if (!item.right || item.right.length <= 1) return;
-
-    currentSlide = (currentSlide + 1) % item.right.length;
-    render();
-  }
-
   function openHelp() {
     helpOverlay.classList.add("open");
     helpDrawer.classList.add("open");
@@ -864,8 +880,7 @@
   }
 
   nextBtn.addEventListener("click", goNextContent);
-  prevSlideBtn.addEventListener("click", goPrevSlide);
-  nextSlideBtn.addEventListener("click", goNextSlide);
+  playBtn.addEventListener("click", toggleSlidePlay);
 
   helpBtn.addEventListener("click", openHelp);
   closeHelpBtn.addEventListener("click", closeHelp);
