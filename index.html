@@ -5,7 +5,545 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>N배송 설정 가이드</title>
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
-  <link rel="stylesheet" href="./style.css" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      font-family: 'Pretendard', sans-serif;
+      background: #f4f6f8;
+      color: #111827;
+      overflow: hidden;
+    }
+
+    body.drawer-open {
+      overflow: hidden;
+    }
+
+    button {
+      font-family: 'Pretendard', sans-serif;
+    }
+
+    .app {
+      width: 100vw;
+      height: 100vh;
+      padding: 16px;
+    }
+
+    .app-shell {
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+      border: 1px solid #e6ebf2;
+      border-radius: 24px;
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 16px;
+      padding: 22px 28px 18px;
+      border-bottom: 1px solid #edf0f4;
+      flex-shrink: 0;
+    }
+
+    .app-logo {
+      height: 34px;
+      width: auto;
+      object-fit: contain;
+      flex-shrink: 0;
+      display: block;
+    }
+
+    .app-title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .app-title {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1.2;
+      color: #111827;
+    }
+
+    .app-subtitle {
+      margin: 0;
+      font-size: 14px;
+      color: #667085;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 20px 28px 18px;
+      border-bottom: 1px solid #edf0f4;
+      flex-shrink: 0;
+      background: #ffffff;
+    }
+
+    .topbar-left {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .step-flow {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .step-flow-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 17px;
+      font-weight: 800;
+      color: #98a2b3;
+      white-space: nowrap;
+      transition: color 0.2s ease;
+    }
+
+    .step-flow-item.active {
+      color: #0040d1;
+    }
+
+    .step-flow-item.done {
+      color: #111827;
+    }
+
+    .step-flow-sep {
+      color: #cbd5e1;
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .step-status-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .step-status-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      border: 1px solid #e5e7eb;
+      background: #f8fafc;
+      color: #98a2b3;
+      white-space: nowrap;
+    }
+
+    .step-status-chip.waiting {
+      background: #f8fafc;
+      color: #98a2b3;
+      border-color: #e5e7eb;
+    }
+
+    .step-status-chip.active {
+      background: #eef3ff;
+      color: #0040d1;
+      border-color: #cfd8ff;
+    }
+
+    .step-status-chip.done {
+      background: #0040d1;
+      color: #ffffff;
+      border-color: #0040d1;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .guide-layout {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      background: #ffffff;
+    }
+
+    .guide-left,
+    .guide-right {
+      width: 50%;
+      min-width: 0;
+      min-height: 0;
+    }
+
+    .guide-left {
+      border-right: 1px solid #edf0f4;
+      padding: 24px 28px 28px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+    }
+
+    .left-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 20px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-shrink: 0;
+      line-height: 1.2;
+    }
+
+    .left-content {
+      flex: 1;
+      min-height: 0;
+      overflow: auto;
+      padding-right: 4px;
+      scrollbar-width: none;
+    }
+
+    .left-content::-webkit-scrollbar {
+      display: none;
+    }
+
+    .guide-right {
+      padding: 24px 28px 20px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      background: #fafbfc;
+    }
+
+    .right-content {
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+      background: #ffffff;
+      border: 1px solid #e6ebf2;
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+    }
+
+    .slide-frame {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .right-nav {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .bottom-fixed-actions {
+      display: none;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 14px;
+      padding: 14px 20px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: #0040d1;
+      color: #ffffff;
+    }
+
+    .btn-outline {
+      background: #ffffff;
+      color: #0040d1;
+      border: 1px solid #cfd8ff;
+    }
+
+    .btn-complete {
+      background: #111827;
+      color: #ffffff;
+    }
+
+    .icon-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid #d9e0ea;
+      background: #ffffff;
+      color: #111827;
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .icon-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+    }
+
+    .icon-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .loading-box {
+      width: 100%;
+      height: 100%;
+      min-height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #667085;
+      font-size: 14px;
+      text-align: center;
+      line-height: 1.7;
+    }
+
+    .right-content > .slide-frame > * {
+      width: 100%;
+      height: 100%;
+    }
+
+    .manual-step-view,
+    .manual-viewer {
+      width: 100% !important;
+      height: 100% !important;
+      max-height: 100% !important;
+    }
+
+    .manual-step-view,
+    .slide-frame,
+    .right-content {
+      scrollbar-width: none;
+    }
+
+    .manual-step-view::-webkit-scrollbar,
+    .slide-frame::-webkit-scrollbar,
+    .right-content::-webkit-scrollbar {
+      display: none;
+    }
+
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.28);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      z-index: 50;
+    }
+
+    .drawer-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .help-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: min(460px, 100%);
+      height: 100vh;
+      background: #ffffff;
+      box-shadow: -12px 0 28px rgba(15, 23, 42, 0.14);
+      transform: translateX(100%);
+      transition: transform 0.28s ease;
+      z-index: 60;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .help-drawer.open {
+      transform: translateX(0);
+    }
+
+    .help-drawer-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 24px;
+      border-bottom: 1px solid #edf0f4;
+      flex-shrink: 0;
+    }
+
+    .drawer-kicker {
+      font-size: 12px;
+      font-weight: 800;
+      color: #0040d1;
+      margin-bottom: 8px;
+    }
+
+    .drawer-title {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 800;
+      color: #111827;
+      line-height: 1.3;
+    }
+
+    .help-drawer-body {
+      flex: 1;
+      overflow: auto;
+      padding: 24px;
+      scrollbar-width: none;
+    }
+
+    .help-drawer-body::-webkit-scrollbar {
+      display: none;
+    }
+
+    .help-block + .help-block {
+      margin-top: 14px;
+    }
+
+    .help-card {
+      border: 1px solid #e6ebf2;
+      border-radius: 16px;
+      background: #f8faff;
+      padding: 16px;
+    }
+
+    .help-card h4 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      font-weight: 800;
+      color: #111827;
+    }
+
+    .help-card p,
+    .help-card li {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.8;
+      color: #4b5563;
+    }
+
+    .help-card ul,
+    .help-card ol {
+      margin: 8px 0 0;
+      padding-left: 18px;
+    }
+
+    @media (max-width: 1200px) {
+      html, body {
+        overflow: auto;
+      }
+
+      .app {
+        height: auto;
+        min-height: 100vh;
+      }
+
+      .app-shell {
+        height: auto;
+      }
+
+      .guide-layout {
+        flex-direction: column;
+      }
+
+      .guide-left,
+      .guide-right {
+        width: 100%;
+      }
+
+      .guide-left {
+        border-right: none;
+        border-bottom: 1px solid #edf0f4;
+      }
+
+      .left-title {
+        white-space: normal;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .app {
+        padding: 10px;
+      }
+
+      .app-header,
+      .topbar,
+      .guide-left,
+      .guide-right {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .app-header {
+        flex-direction: row;
+        align-items: flex-start;
+      }
+
+      .app-title {
+        font-size: 22px;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .topbar-right {
+        width: 100%;
+      }
+
+      .topbar-right .btn {
+        flex: 1;
+      }
+
+      .left-title {
+        font-size: 22px;
+      }
+
+      .right-content {
+        min-height: 420px;
+        padding: 12px;
+      }
+
+      .icon-btn {
+        width: 42px;
+        height: 42px;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="app">
@@ -18,61 +556,35 @@
         </div>
       </header>
 
-      <section class="progress-section">
-        <div class="progress-header">
-          <div>
-            <p class="progress-label">진행률</p>
-            <h2 class="progress-title" id="progressTitle">STEP 1 진행 중</h2>
-          </div>
-          <div class="progress-meta" id="progressMeta">1 / 3</div>
+      <section class="topbar">
+        <div class="topbar-left">
+          <div class="step-flow" id="stepFlow"></div>
+          <div class="step-status-row" id="stepStatusRow"></div>
         </div>
 
-        <div class="progress-track" id="progressTrack"></div>
+        <div class="topbar-right">
+          <button class="btn btn-outline" id="helpBtn">도움말</button>
+          <button class="btn btn-primary" id="nextStepBtn">다음 단계</button>
+        </div>
       </section>
 
       <main class="guide-layout">
         <section class="guide-left">
-          <div class="panel-head">
-            <div>
-              <div class="panel-kicker" id="stepKicker">STEP 1</div>
-              <h2 class="panel-title" id="stepTitle">품고 나우 로그인하기</h2>
-            </div>
-          </div>
-
-          <div class="panel-body" id="leftContent">
+          <div class="left-title" id="leftTitle">STEP1 품고 나우 로그인</div>
+          <div class="left-content" id="leftContent">
             <div class="loading-box">설명 화면을 불러오는 중입니다...</div>
-          </div>
-
-          <div class="panel-footer">
-            <div class="footer-left">
-              <button class="btn btn-secondary" id="prevStepBtn">이전 단계</button>
-              <button class="btn btn-outline" id="helpBtn">도움말</button>
-            </div>
-            <div class="footer-right">
-              <button class="btn btn-primary" id="nextStepBtn">다음 단계</button>
-            </div>
           </div>
         </section>
 
         <section class="guide-right">
-          <div class="panel-head panel-head-right">
-            <div>
-              <div class="panel-kicker">화면 예시</div>
-              <h2 class="panel-title" id="slideTitle">화면 1</h2>
-            </div>
-
-            <div class="slide-toolbar">
-              <button class="icon-btn" id="prevSlideBtn" aria-label="이전 화면">&lt;</button>
-              <span class="slide-count" id="slideCount">1 / 1</span>
-              <button class="icon-btn" id="nextSlideBtn" aria-label="다음 화면">&gt;</button>
-            </div>
-          </div>
-
-          <div class="slide-stage" id="rightContent">
+          <div class="right-content" id="rightContent">
             <div class="loading-box">화면 예시를 불러오는 중입니다...</div>
           </div>
 
-          <div class="slide-dots" id="slideDots"></div>
+          <div class="right-nav">
+            <button class="icon-btn" id="prevSlideBtn" aria-label="이전 화면">&lt;</button>
+            <button class="icon-btn" id="nextSlideBtn" aria-label="다음 화면">&gt;</button>
+          </div>
         </section>
       </main>
     </div>
@@ -86,7 +598,7 @@
         <div class="drawer-kicker">도움말</div>
         <h3 class="drawer-title" id="drawerTitle">현재 단계 도움말</h3>
       </div>
-      <button class="icon-btn close-btn" id="closeHelpBtn" aria-label="도움말 닫기">×</button>
+      <button class="icon-btn" id="closeHelpBtn" aria-label="도움말 닫기">×</button>
     </div>
 
     <div class="help-drawer-body" id="helpContent">
@@ -94,6 +606,253 @@
     </div>
   </aside>
 
-  <script src="./script.js"></script>
+  <script>
+    const GUIDE_STEPS = [
+      {
+        id: 1,
+        shortLabel: "STEP1",
+        title: "품고 나우 로그인",
+        leftFile: "./steps/step1-left.html",
+        rightFiles: [
+          "./steps/step1-right-1.html",
+          "./steps/step1-right-2.html",
+          "./steps/step1-right-3.html"
+        ],
+        helpFile: "./help/step1-help.html"
+      },
+      {
+        id: 2,
+        shortLabel: "STEP2",
+        title: "판매처 등록",
+        leftFile: "./steps/step2-left.html",
+        rightFiles: [
+          "./steps/step2-right-1.html",
+          "./steps/step2-right-2.html"
+        ],
+        helpFile: "./help/step2-help.html"
+      },
+      {
+        id: 3,
+        shortLabel: "STEP3",
+        title: "풀필먼트 연동",
+        leftFile: "./steps/step3-left.html",
+        rightFiles: [
+          "./steps/step3-right-1.html"
+        ],
+        helpFile: "./help/step3-help.html"
+      },
+      {
+        id: 4,
+        shortLabel: "STEP4",
+        title: "N배송 프로그램 이용",
+        leftFile: "./steps/step4-left.html",
+        rightFiles: [
+          "./steps/step4-right-1.html"
+        ],
+        helpFile: "./help/step4-help.html"
+      },
+      {
+        id: 5,
+        shortLabel: "STEP5",
+        title: "설정 완료",
+        leftFile: "./steps/step5-left.html",
+        rightFiles: [
+          "./steps/step5-right-1.html"
+        ],
+        helpFile: "./help/step5-help.html"
+      }
+    ];
+
+    let currentStepIndex = 0;
+    let currentSlideIndex = 0;
+
+    const stepFlow = document.getElementById("stepFlow");
+    const stepStatusRow = document.getElementById("stepStatusRow");
+    const leftTitle = document.getElementById("leftTitle");
+    const leftContent = document.getElementById("leftContent");
+    const rightContent = document.getElementById("rightContent");
+    const prevSlideBtn = document.getElementById("prevSlideBtn");
+    const nextSlideBtn = document.getElementById("nextSlideBtn");
+    const nextStepBtn = document.getElementById("nextStepBtn");
+    const helpBtn = document.getElementById("helpBtn");
+
+    const drawerOverlay = document.getElementById("drawerOverlay");
+    const helpDrawer = document.getElementById("helpDrawer");
+    const closeHelpBtn = document.getElementById("closeHelpBtn");
+    const helpContent = document.getElementById("helpContent");
+    const drawerTitle = document.getElementById("drawerTitle");
+
+    function cacheBust(url) {
+      return `${url}?v=${Date.now()}`;
+    }
+
+    async function fetchHtml(url) {
+      const response = await fetch(cacheBust(url), { cache: "no-store" });
+      if (!response.ok) throw new Error(`파일을 불러오지 못했습니다: ${url}`);
+      return await response.text();
+    }
+
+    function renderTopbar() {
+      stepFlow.innerHTML = "";
+      stepStatusRow.innerHTML = "";
+
+      GUIDE_STEPS.forEach((step, index) => {
+        const flowItem = document.createElement("div");
+        let cls = "step-flow-item";
+        if (index < currentStepIndex) cls += " done";
+        if (index === currentStepIndex) cls += " active";
+        flowItem.className = cls;
+        flowItem.textContent = step.shortLabel;
+        stepFlow.appendChild(flowItem);
+
+        if (index < GUIDE_STEPS.length - 1) {
+          const sep = document.createElement("span");
+          sep.className = "step-flow-sep";
+          sep.textContent = ">";
+          stepFlow.appendChild(sep);
+        }
+
+        const statusChip = document.createElement("div");
+        let statusClass = "waiting";
+        let statusText = `${step.shortLabel} 대기중`;
+
+        if (index < currentStepIndex) {
+          statusClass = "done";
+          statusText = `${step.shortLabel} 완료`;
+        } else if (index === currentStepIndex) {
+          statusClass = "active";
+          statusText = `${step.shortLabel} 진행중`;
+        }
+
+        statusChip.className = `step-status-chip ${statusClass}`;
+        statusChip.textContent = statusText;
+        stepStatusRow.appendChild(statusChip);
+      });
+    }
+
+    async function renderLeftPanel() {
+      const step = GUIDE_STEPS[currentStepIndex];
+      leftTitle.textContent = `${step.shortLabel} ${step.title}`;
+      leftContent.innerHTML = `<div class="loading-box">설명 화면을 불러오는 중입니다...</div>`;
+
+      try {
+        const html = await fetchHtml(step.leftFile);
+        leftContent.innerHTML = html;
+      } catch (error) {
+        leftContent.innerHTML = `<div class="loading-box">${error.message}</div>`;
+        console.error(error);
+      }
+    }
+
+    async function renderRightPanel() {
+      const step = GUIDE_STEPS[currentStepIndex];
+      const totalSlides = step.rightFiles.length;
+
+      if (currentSlideIndex >= totalSlides) {
+        currentSlideIndex = 0;
+      }
+
+      rightContent.innerHTML = `<div class="loading-box">화면 예시를 불러오는 중입니다...</div>`;
+
+      try {
+        const html = await fetchHtml(step.rightFiles[currentSlideIndex]);
+        rightContent.innerHTML = `<div class="slide-frame">${html}</div>`;
+      } catch (error) {
+        rightContent.innerHTML = `<div class="loading-box">${error.message}</div>`;
+        console.error(error);
+      }
+
+      prevSlideBtn.disabled = totalSlides <= 1;
+      nextSlideBtn.disabled = totalSlides <= 1;
+    }
+
+    async function renderHelpPanel() {
+      const step = GUIDE_STEPS[currentStepIndex];
+      drawerTitle.textContent = `${step.shortLabel} ${step.title} 도움말`;
+      helpContent.innerHTML = `<div class="loading-box">도움말을 불러오는 중입니다...</div>`;
+
+      try {
+        const html = await fetchHtml(step.helpFile);
+        helpContent.innerHTML = html;
+      } catch (error) {
+        helpContent.innerHTML = `<div class="loading-box">${error.message}</div>`;
+        console.error(error);
+      }
+    }
+
+    function updateButtons() {
+      if (currentStepIndex === GUIDE_STEPS.length - 1) {
+        nextStepBtn.textContent = "가이드 완료";
+        nextStepBtn.classList.add("btn-complete");
+        nextStepBtn.classList.remove("btn-primary");
+      } else {
+        nextStepBtn.textContent = "다음 단계";
+        nextStepBtn.classList.add("btn-primary");
+        nextStepBtn.classList.remove("btn-complete");
+      }
+    }
+
+    async function renderCurrentStep() {
+      renderTopbar();
+      updateButtons();
+      await renderLeftPanel();
+      await renderRightPanel();
+      await renderHelpPanel();
+    }
+
+    async function goNextStep() {
+      if (currentStepIndex < GUIDE_STEPS.length - 1) {
+        currentStepIndex += 1;
+        currentSlideIndex = 0;
+        await renderCurrentStep();
+      } else {
+        alert("수고하셨습니다! 가이드 확인이 완료되었습니다.");
+      }
+    }
+
+    async function goPrevSlide() {
+      const step = GUIDE_STEPS[currentStepIndex];
+      if (step.rightFiles.length <= 1) return;
+      currentSlideIndex = (currentSlideIndex - 1 + step.rightFiles.length) % step.rightFiles.length;
+      await renderRightPanel();
+    }
+
+    async function goNextSlide() {
+      const step = GUIDE_STEPS[currentStepIndex];
+      if (step.rightFiles.length <= 1) return;
+      currentSlideIndex = (currentSlideIndex + 1) % step.rightFiles.length;
+      await renderRightPanel();
+    }
+
+    function openHelpDrawer() {
+      drawerOverlay.classList.add("open");
+      helpDrawer.classList.add("open");
+      helpDrawer.setAttribute("aria-hidden", "false");
+      document.body.classList.add("drawer-open");
+    }
+
+    function closeHelpDrawer() {
+      drawerOverlay.classList.remove("open");
+      helpDrawer.classList.remove("open");
+      helpDrawer.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("drawer-open");
+    }
+
+    nextStepBtn.addEventListener("click", goNextStep);
+    prevSlideBtn.addEventListener("click", goPrevSlide);
+    nextSlideBtn.addEventListener("click", goNextSlide);
+
+    helpBtn.addEventListener("click", openHelpDrawer);
+    closeHelpBtn.addEventListener("click", closeHelpDrawer);
+    drawerOverlay.addEventListener("click", closeHelpDrawer);
+
+    document.addEventListener("keydown", async (event) => {
+      if (event.key === "Escape") closeHelpDrawer();
+      if (event.key === "ArrowLeft") await goPrevSlide();
+      if (event.key === "ArrowRight") await goNextSlide();
+    });
+
+    renderCurrentStep();
+  </script>
 </body>
 </html>
