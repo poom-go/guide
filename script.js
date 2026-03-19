@@ -1,8 +1,8 @@
 const GUIDE_STEPS = [
   {
     id: 1,
-    name: "판매처 등록",
-    title: "판매처 등록",
+    name: "STEP 1",
+    title: "품고 나우 로그인",
     leftFile: "./steps/step1-left.html",
     rightFiles: [
       "./steps/step1-right-1.html",
@@ -12,8 +12,8 @@ const GUIDE_STEPS = [
   },
   {
     id: 2,
-    name: "풀필먼트 연동",
-    title: "풀필먼트 연동",
+    name: "STEP 2",
+    title: "판매처 등록",
     leftFile: "./steps/step2-left.html",
     rightFiles: [
       "./steps/step2-right-1.html",
@@ -23,8 +23,8 @@ const GUIDE_STEPS = [
   },
   {
     id: 3,
-    name: "N배송 프로그램 이용",
-    title: "N배송 프로그램 이용",
+    name: "STEP 3",
+    title: "풀필먼트 연동",
     leftFile: "./steps/step3-left.html",
     rightFiles: [
       "./steps/step3-right-1.html"
@@ -36,7 +36,10 @@ const GUIDE_STEPS = [
 let currentStepIndex = 0;
 let currentSlideIndex = 0;
 
-const stepNav = document.getElementById("stepNav");
+const progressTitle = document.getElementById("progressTitle");
+const progressMeta = document.getElementById("progressMeta");
+const progressTrack = document.getElementById("progressTrack");
+
 const stepKicker = document.getElementById("stepKicker");
 const stepTitle = document.getElementById("stepTitle");
 const leftContent = document.getElementById("leftContent");
@@ -69,19 +72,44 @@ async function fetchHtml(url) {
   return await response.text();
 }
 
-function renderStepNav() {
-  stepNav.innerHTML = "";
+function renderProgress() {
+  progressTrack.innerHTML = "";
+  const total = GUIDE_STEPS.length;
+  const current = currentStepIndex + 1;
+
+  progressTitle.textContent = `STEP ${current} 진행 중`;
+  progressMeta.textContent = `${current} / ${total}`;
 
   GUIDE_STEPS.forEach((step, index) => {
-    const button = document.createElement("button");
-    button.className = `step-chip ${index === currentStepIndex ? "active" : ""}`;
-    button.textContent = `${step.id}. ${step.name}`;
-    button.addEventListener("click", async () => {
-      currentStepIndex = index;
-      currentSlideIndex = 0;
-      await renderCurrentStep();
-    });
-    stepNav.appendChild(button);
+    const stepWrap = document.createElement("div");
+    let stateClass = "";
+    if (index < currentStepIndex) stateClass = "done";
+    if (index === currentStepIndex) stateClass = "current";
+
+    stepWrap.className = `progress-step ${stateClass}`;
+
+    const nodeWrap = document.createElement("div");
+    nodeWrap.className = "progress-node-wrap";
+
+    const node = document.createElement("div");
+    node.className = "progress-node";
+    node.textContent = index < currentStepIndex ? "✓" : step.id;
+
+    const text = document.createElement("div");
+    text.className = "progress-text";
+    text.textContent = `STEP ${step.id}`;
+
+    nodeWrap.appendChild(node);
+    nodeWrap.appendChild(text);
+    stepWrap.appendChild(nodeWrap);
+
+    if (index < GUIDE_STEPS.length - 1) {
+      const line = document.createElement("div");
+      line.className = "progress-line";
+      stepWrap.appendChild(line);
+    }
+
+    progressTrack.appendChild(stepWrap);
   });
 }
 
@@ -169,7 +197,7 @@ function updateStepButtons() {
 }
 
 async function renderCurrentStep() {
-  renderStepNav();
+  renderProgress();
   updateStepButtons();
   await renderLeftPanel();
   await renderRightPanel();
@@ -235,15 +263,9 @@ closeHelpBtn.addEventListener("click", closeHelpDrawer);
 drawerOverlay.addEventListener("click", closeHelpDrawer);
 
 document.addEventListener("keydown", async (event) => {
-  if (event.key === "Escape") {
-    closeHelpDrawer();
-  }
-  if (event.key === "ArrowLeft") {
-    await goPrevSlide();
-  }
-  if (event.key === "ArrowRight") {
-    await goNextSlide();
-  }
+  if (event.key === "Escape") closeHelpDrawer();
+  if (event.key === "ArrowLeft") await goPrevSlide();
+  if (event.key === "ArrowRight") await goNextSlide();
 });
 
 renderCurrentStep();
