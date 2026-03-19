@@ -7,12 +7,20 @@
 
     <!-- ❌ 좌우 버튼 제거 완료 -->
 
-    <div
-      class="manual-step-view"
-      data-step-view="1"
-      style="position:absolute; inset:0; background:#fff; display:flex; align-items:flex-start; justify-content:center; overflow:auto; padding:42px 24px 36px;"
-    >
-      <div style="width:400px; max-width:100%; text-align:center; margin:0 auto;">
+<div
+  class="manual-step-view"
+  data-step-view="1"
+  style="
+    position:absolute;
+    inset:0;
+    background:#fff;
+    display:flex;
+    align-items:center; /* ✅ 여기 수정 */
+    justify-content:center;
+    overflow:hidden; /* 스크롤도 같이 제거 추천 */
+    padding:24px;
+  "
+>
 
         <!-- ✅ 로고 정상 수정 -->
 <img
