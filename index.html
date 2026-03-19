@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
@@ -32,6 +32,7 @@
       height: 100vh;
     }
 
+    /* ================= SIDEBAR ================= */
     .sidebar {
       width: 320px;
       background: #fff;
@@ -102,6 +103,7 @@
       border-radius: 999px;
       white-space: nowrap;
       height: fit-content;
+      flex-shrink: 0;
     }
 
     .badge.done {
@@ -151,8 +153,10 @@
       color: #9ca3af;
       white-space: nowrap;
       margin-left: 6px;
+      font-weight: 600;
     }
 
+    /* ================= MAIN ================= */
     .main {
       flex: 1;
       display: flex;
@@ -168,6 +172,7 @@
       border-bottom: 1px solid #eee;
       background: #fff;
       flex-shrink: 0;
+      gap: 16px;
     }
 
     .title {
@@ -182,6 +187,7 @@
       font-weight: 700;
       color: #0040d1;
       flex-shrink: 0;
+      white-space: nowrap;
     }
 
     .content {
@@ -246,20 +252,16 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      animation: fadeInStep 0.25s ease;
+      animation: fadeInContent 0.22s ease;
     }
 
-    @keyframes fadeInStep {
-      from { opacity: 0.4; }
+    @keyframes fadeInContent {
+      from { opacity: 0.45; }
       to { opacity: 1; }
     }
 
-    .nav {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 10px;
-      flex-shrink: 0;
+    .right-nav {
+      display: none;
     }
 
     .btn {
@@ -311,24 +313,22 @@
     }
 
     .manual-step-view,
-    .manual-viewer {
-      width: 100% !important;
-      height: 100% !important;
-      max-height: 100% !important;
-    }
-
-    .manual-step-view,
+    .manual-viewer,
+    .guide-wrapper,
     .viewer,
     .viewer-frame {
       scrollbar-width: none;
     }
 
     .manual-step-view::-webkit-scrollbar,
+    .manual-viewer::-webkit-scrollbar,
+    .guide-wrapper::-webkit-scrollbar,
     .viewer::-webkit-scrollbar,
     .viewer-frame::-webkit-scrollbar {
       display: none;
     }
 
+    /* ================= HELP ================= */
     .help-overlay {
       position: fixed;
       inset: 0;
@@ -538,10 +538,7 @@
 
       <section class="right">
         <div class="viewer" id="right"></div>
-
-        <div class="nav">
-          <button class="btn btn-outline" id="playBtn" type="button" style="display:none;">▶ 재생</button>
-        </div>
+        <div class="right-nav"></div>
       </section>
     </div>
   </section>
@@ -572,20 +569,14 @@
           title: "품고 나우 로그인",
           required: true,
           left: "./steps/step1-login-left.html",
-          right: [
-            "./steps/step1-login-right-1.html",
-            "./steps/step1-login-right-2.html",
-            "./steps/step1-login-right-3.html"
-          ],
+          right: "./steps/step1-login-right.html",
           help: "./help/step1-help.html"
         },
         {
           title: "구성원 추가",
           required: false,
           left: "./steps/step1-member-left.html",
-          right: [
-            "./steps/step1-member-right-1.html"
-          ],
+          right: "./steps/step1-member-right.html",
           help: "./help/step1-member-help.html"
         }
       ]
@@ -593,29 +584,80 @@
     {
       title: "STEP2. 풀필먼트 연동",
       items: [
-        { title: "판매처 계정 등록", required: true, left: "./steps/step2-account-left.html", right: ["./steps/step2-account-right-1.html"], help: "./help/step2-account-help.html" },
-        { title: "풀필먼트 연동", required: true, left: "./steps/step2-fulfillment-left.html", right: ["./steps/step2-fulfillment-right-1.html"], help: "./help/step2-fulfillment-help.html" },
-        { title: "N배송 프로그램 약관 동의", required: true, left: "./steps/step2-terms-left.html", right: ["./steps/step2-terms-right-1.html"], help: "./help/step2-terms-help.html" }
+        {
+          title: "판매처 계정 등록",
+          required: true,
+          left: "./steps/step2-account-left.html",
+          right: "./steps/step2-account-right.html",
+          help: "./help/step2-account-help.html"
+        },
+        {
+          title: "풀필먼트 연동",
+          required: true,
+          left: "./steps/step2-fulfillment-left.html",
+          right: "./steps/step2-fulfillment-right.html",
+          help: "./help/step2-fulfillment-help.html"
+        },
+        {
+          title: "N배송 프로그램 약관 동의",
+          required: true,
+          left: "./steps/step2-terms-left.html",
+          right: "./steps/step2-terms-right.html",
+          help: "./help/step2-terms-help.html"
+        }
       ]
     },
     {
       title: "STEP3. SKU 등록",
       items: [
-        { title: "SKU 등록", required: true, left: "./steps/step3-sku-left.html", right: ["./steps/step3-sku-right-1.html"], help: "./help/step3-sku-help.html" },
-        { title: "상품 매핑", required: true, left: "./steps/step3-mapping-left.html", right: ["./steps/step3-mapping-right-1.html"], help: "./help/step3-mapping-help.html" }
+        {
+          title: "SKU 등록",
+          required: true,
+          left: "./steps/step3-sku-left.html",
+          right: "./steps/step3-sku-right.html",
+          help: "./help/step3-sku-help.html"
+        },
+        {
+          title: "상품 매핑",
+          required: true,
+          left: "./steps/step3-mapping-left.html",
+          right: "./steps/step3-mapping-right.html",
+          help: "./help/step3-mapping-help.html"
+        }
       ]
     },
     {
       title: "STEP4. 초도 입고",
       items: [
-        { title: "입고 가이드", required: true, left: "./steps/step4-inbound-left.html", right: ["./steps/step4-inbound-right-1.html"], help: "./help/step4-inbound-help.html" },
-        { title: "초도 입고 패킹리스트 제출하기", required: true, left: "./steps/step4-packing-left.html", right: ["./steps/step4-packing-right-1.html"], help: "./help/step4-packing-help.html" }
+        {
+          title: "입고 가이드",
+          required: true,
+          left: "./steps/step4-inbound-left.html",
+          right: [
+            "./steps/step4-inbound-right-1.html",
+            "./steps/step4-inbound-right-2.html"
+          ],
+          help: "./help/step4-inbound-help.html"
+        },
+        {
+          title: "초도 입고 패킹리스트 제출하기",
+          required: true,
+          left: "./steps/step4-packing-left.html",
+          right: "./steps/step4-packing-right.html",
+          help: "./help/step4-packing-help.html"
+        }
       ]
     },
     {
       title: "STEP5. N배송 설정하기",
       items: [
-        { title: "N배송 설정하기", required: true, left: "./steps/step5-left.html", right: ["./steps/step5-right-1.html"], help: "./help/step5-help.html" }
+        {
+          title: "N배송 설정하기",
+          required: true,
+          left: "./steps/step5-left.html",
+          right: "./steps/step5-right.html",
+          help: "./help/step5-help.html"
+        }
       ]
     }
   ];
@@ -623,9 +665,6 @@
   let currentStep = 0;
   let currentItem = 0;
   let currentSlide = 0;
-  let slidePlayTimer = null;
-  let isPlayingSlides = false;
-
   const done = {};
 
   const sidebarEl = document.getElementById("sidebar");
@@ -635,7 +674,6 @@
   const rightEl = document.getElementById("right");
   const helpBtn = document.getElementById("helpBtn");
   const nextBtn = document.getElementById("nextBtn");
-  const playBtn = document.getElementById("playBtn");
 
   const helpOverlay = document.getElementById("helpOverlay");
   const helpDrawer = document.getElementById("helpDrawer");
@@ -647,38 +685,18 @@
     return STEPS[currentStep].items[currentItem];
   }
 
+  function normalizeRightFiles(right) {
+    if (Array.isArray(right)) return right;
+    if (typeof right === "string" && right.trim()) return [right];
+    return [];
+  }
+
   function requiredItemsFlat() {
     return STEPS.flatMap((step, sIdx) =>
       step.items
         .map((item, iIdx) => ({ ...item, key: `${sIdx}-${iIdx}` }))
         .filter(item => item.required)
     );
-  }
-
-  function isStep1Login() {
-    return currentStep === 0 && currentItem === 0;
-  }
-
-  function stopSlidePlay() {
-    if (slidePlayTimer) {
-      clearInterval(slidePlayTimer);
-      slidePlayTimer = null;
-    }
-    isPlayingSlides = false;
-    updatePlayButton();
-  }
-
-  function updatePlayButton() {
-    const item = currentItemData();
-    const canPlay = isStep1Login() && item.right && item.right.length > 1;
-
-    if (!canPlay) {
-      playBtn.style.display = "none";
-      return;
-    }
-
-    playBtn.style.display = "inline-flex";
-    playBtn.textContent = isPlayingSlides ? "⏸ 일시정지" : "▶ 재생";
   }
 
   function renderSidebar() {
@@ -720,7 +738,6 @@
           </span>
         `;
         itemEl.addEventListener("click", () => {
-          stopSlidePlay();
           currentStep = sIdx;
           currentItem = iIdx;
           currentSlide = 0;
@@ -771,21 +788,17 @@
     progressEl.textContent = `진행률 ${percent}%`;
   }
 
-  async function renderRightOnly() {
-    const item = currentItemData();
-    try {
-      rightEl.innerHTML = `<div class="viewer-frame">${await loadHTML(item.right[currentSlide])}</div>`;
-    } catch (e) {
-      rightEl.innerHTML = `<div class="loading-box">${e.message}</div>`;
-    }
-    updatePlayButton();
-  }
-
   async function render() {
     renderSidebar();
     renderProgress();
 
     const item = currentItemData();
+    const rightFiles = normalizeRightFiles(item.right);
+
+    if (currentSlide >= rightFiles.length) {
+      currentSlide = 0;
+    }
+
     titleEl.textContent = item.title;
 
     try {
@@ -795,13 +808,16 @@
     }
 
     try {
-      rightEl.innerHTML = `<div class="viewer-frame">${await loadHTML(item.right[currentSlide])}</div>`;
+      if (rightFiles.length > 0) {
+        rightEl.innerHTML = `<div class="viewer-frame">${await loadHTML(rightFiles[currentSlide])}</div>`;
+      } else {
+        rightEl.innerHTML = `<div class="loading-box">등록된 화면이 없습니다.</div>`;
+      }
     } catch (e) {
       rightEl.innerHTML = `<div class="loading-box">${e.message}</div>`;
     }
 
     await renderHelp();
-    updatePlayButton();
 
     if (currentStep === STEPS.length - 1 && currentItem === STEPS[currentStep].items.length - 1) {
       nextBtn.textContent = "가이드 완료";
@@ -814,36 +830,15 @@
     }
   }
 
-  function toggleSlidePlay() {
+  function goNextContent() {
     const item = currentItemData();
-    const canPlay = isStep1Login() && item.right && item.right.length > 1;
-    if (!canPlay) return;
+    const rightFiles = normalizeRightFiles(item.right);
 
-    if (isPlayingSlides) {
-      stopSlidePlay();
+    if (rightFiles.length > 1 && currentSlide < rightFiles.length - 1) {
+      currentSlide += 1;
+      render();
       return;
     }
-
-    isPlayingSlides = true;
-    updatePlayButton();
-
-    slidePlayTimer = setInterval(async () => {
-      const latestItem = currentItemData();
-
-      if (!isStep1Login() || !latestItem.right || latestItem.right.length <= 1) {
-        stopSlidePlay();
-        return;
-      }
-
-      currentSlide = (currentSlide + 1) % latestItem.right.length;
-      await renderRightOnly();
-    }, 2500);
-  }
-
-  function goNextContent() {
-    stopSlidePlay();
-
-    const item = currentItemData();
 
     if (item.required) {
       done[`${currentStep}-${currentItem}`] = true;
@@ -852,13 +847,13 @@
     currentSlide = 0;
 
     if (currentItem < STEPS[currentStep].items.length - 1) {
-      currentItem++;
+      currentItem += 1;
       render();
       return;
     }
 
     if (currentStep < STEPS.length - 1) {
-      currentStep++;
+      currentStep += 1;
       currentItem = 0;
       render();
       return;
@@ -880,8 +875,6 @@
   }
 
   nextBtn.addEventListener("click", goNextContent);
-  playBtn.addEventListener("click", toggleSlidePlay);
-
   helpBtn.addEventListener("click", openHelp);
   closeHelpBtn.addEventListener("click", closeHelp);
   helpOverlay.addEventListener("click", closeHelp);
