@@ -1,7 +1,8 @@
 const GUIDE_STEPS = [
 {
   id: 1,
-  title: "STEP1",
+  shortLabel: "STEP1",
+  hasSubSteps: true,
   subSteps: [
     {
       title: "품고 나우 로그인",
@@ -9,7 +10,7 @@ const GUIDE_STEPS = [
       rightFiles: [
         "./steps/step1-login-right-1.html",
         "./steps/step1-login-right-2.html",
-       "./steps/step1-login-right-3.html"
+        "./steps/step1-login-right-3.html"
       ],
       helpFile: "./help/step1-help.html"
     },
@@ -22,7 +23,7 @@ const GUIDE_STEPS = [
       helpFile: "./help/step1-member-help.html"
     }
   ]
-},
+}
   {
     id: 2,
     name: "STEP 2",
