@@ -1,0 +1,119 @@
+<div style="min-width:0; width:100%;">
+  <div
+    class="manual-viewer"
+    data-current-manual-step="1"
+    style="position:relative; width:100%; height:620px; background:#f1f5f9; border-radius:16px; overflow:hidden; border:1px solid #d1d5db;"
+  >
+    <button
+      type="button"
+      class="manual-side-btn manual-side-prev"
+      data-manual-prev
+      aria-label="이전"
+      style="position:absolute; left:16px; top:50%; transform:translateY(-50%); z-index:10; width:42px; height:42px; border:none; border-radius:999px; background:rgba(255,255,255,0.96); color:#111827; font-size:28px; line-height:1; cursor:pointer; box-shadow:0 6px 20px rgba(15,23,42,0.12);"
+    >
+      ‹
+    </button>
+
+    <button
+      type="button"
+      class="manual-side-btn manual-side-next"
+      data-manual-next
+      aria-label="다음"
+      style="position:absolute; right:16px; top:50%; transform:translateY(-50%); z-index:10; width:42px; height:42px; border:none; border-radius:999px; background:rgba(255,255,255,0.96); color:#111827; font-size:28px; line-height:1; cursor:pointer; box-shadow:0 6px 20px rgba(15,23,42,0.12);"
+    >
+      ›
+    </button>
+
+    <div
+      class="manual-step-view"
+      data-step-view="1"
+      style="position:absolute; inset:0; background:#fff; display:flex; align-items:flex-start; justify-content:center; overflow:auto; padding:42px 24px 36px;"
+    >
+      <div style="width:400px; max-width:100%; text-align:center; margin:0 auto;">
+        <img
+          src="./Primary Logo.png"
+          alt="logo"
+          style="height:26px; width:auto; margin-bottom:46px; object-fit:contain;"
+          onerror="this.style.display='none'"
+        >
+
+        <div
+          style="height:54px; border:1px solid #ced4da; border-radius:6px; margin-bottom:14px; background:#f9fafb; display:flex; align-items:center; padding:0 16px; color:#9ca3af; font-size:15px; text-align:left;"
+        >
+          이메일
+        </div>
+
+        <div
+          style="height:54px; border:1px solid #ced4da; border-radius:6px; margin-bottom:16px; background:#f9fafb; display:flex; align-items:center; justify-content:space-between; padding:0 16px; color:#9ca3af; font-size:15px;"
+        >
+          <span>비밀번호</span>
+          <span style="letter-spacing:2px;"></span>
+        </div>
+
+        <div
+          style="display:flex; align-items:center; gap:8px; font-size:14px; color:#111827; font-weight:700; margin-bottom:20px; text-align:left;"
+        >
+          <span
+            style="width:16px; height:16px; border:1.5px solid #cbd5e1; border-radius:4px; display:inline-block; background:#fff;"
+          ></span>
+          <span>이메일 저장</span>
+        </div>
+
+        <div
+          style="height:56px; background:#0040d1; border-radius:4px; margin-bottom:34px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:16px; font-weight:700; box-shadow:0 10px 22px rgba(0,64,209,.22);"
+        >
+          로그인
+        </div>
+
+        <div style="position:relative; display:inline-block;">
+          <span style="color:#111827; font-size:15px; font-weight:700;">비밀번호 찾기</span>
+          <div class="manual-click-pulse"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .manual-click-pulse {
+    position: absolute;
+    top: -8px;
+    right: -34px;
+    width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    background: #0040d1;
+    box-shadow: 0 0 0 rgba(0, 64, 209, 0.35);
+    animation: manualPulse 1.4s infinite;
+  }
+
+  .manual-click-pulse::after {
+    content: "클릭";
+    position: absolute;
+    top: -2px;
+    left: 24px;
+    background: #0040d1;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    padding: 5px 7px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  @keyframes manualPulse {
+    0% {
+      transform: scale(0.9);
+      box-shadow: 0 0 0 0 rgba(0, 64, 209, 0.35);
+    }
+    70% {
+      transform: scale(1);
+      box-shadow: 0 0 0 12px rgba(0, 64, 209, 0);
+    }
+    100% {
+      transform: scale(0.9);
+      box-shadow: 0 0 0 0 rgba(0, 64, 209, 0);
+    }
+  }
+</style>
