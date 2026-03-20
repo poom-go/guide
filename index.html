@@ -1,889 +1,345 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>N배송 가이드</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
-
-  <style>
-    * { box-sizing: border-box; }
-
-    html, body {
-      margin: 0;
-      width: 100%;
-      height: 100%;
-      font-family: Pretendard, sans-serif;
-      background: #f6f8fb;
-      color: #111827;
-      overflow: hidden;
-    }
-
-    body.help-open {
-      overflow: hidden;
-    }
-
-    button {
-      font-family: Pretendard, sans-serif;
-    }
-
-    .app {
-      display: flex;
-      height: 100vh;
-    }
-
-    /* ================= SIDEBAR ================= */
-    .sidebar {
-      width: 320px;
-      background: #fff;
-      border-right: 1px solid #eee;
-      padding: 20px;
-      overflow: auto;
-      scrollbar-width: none;
-      flex-shrink: 0;
-    }
-
-    .sidebar::-webkit-scrollbar {
-      display: none;
-    }
-
-    .sidebar-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding-bottom: 18px;
-      margin-bottom: 22px;
-      border-bottom: 1px solid #f1f3f5;
-    }
-
-    .sidebar-brand img {
-      height: 30px;
-      width: auto;
-      display: block;
-      object-fit: contain;
-      flex-shrink: 0;
-    }
-
-    .sidebar-brand-text {
-      min-width: 0;
-    }
-
-    .sidebar-brand-title {
-      margin: 0;
-      font-size: 19px;
-      font-weight: 800;
-      color: #111827;
-      line-height: 1.2;
-    }
-
-    .sidebar-brand-desc {
-      margin: 4px 0 0;
-      font-size: 12px;
-      color: #6b7280;
-      line-height: 1.4;
-    }
-
-    .step {
-      margin-bottom: 24px;
-    }
-
-    .step-title {
-      font-weight: 800;
-      font-size: 15px;
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      line-height: 1.4;
-    }
-
-    .badge {
-      font-size: 11px;
-      padding: 4px 8px;
-      border-radius: 999px;
-      white-space: nowrap;
-      height: fit-content;
-      flex-shrink: 0;
-    }
-
-    .badge.done {
-      background: #111827;
-      color: #fff;
-    }
-
-    .badge.ing {
-      background: #0040d1;
-      color: #fff;
-    }
-
-    .badge.wait {
-      background: #e5e7eb;
-      color: #555;
-    }
-
-    .sub {
-      padding-left: 8px;
-    }
-
-    .sub-item {
-      padding: 10px 12px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      color: #374151;
-      transition: background 0.2s ease, color 0.2s ease;
-    }
-
-    .sub-item:hover {
-      background: #f3f4f6;
-    }
-
-    .sub-item.active {
-      background: #eef3ff;
-      color: #0040d1;
-      font-weight: 700;
-    }
-
-    .optional {
-      font-size: 11px;
-      color: #9ca3af;
-      white-space: nowrap;
-      margin-left: 6px;
-      font-weight: 600;
-    }
-
-    /* ================= MAIN ================= */
-    .main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-    }
-
-    .top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 30px;
-      border-bottom: 1px solid #eee;
-      background: #fff;
-      flex-shrink: 0;
-      gap: 16px;
-    }
-
-    .title {
-      font-size: 22px;
-      font-weight: 800;
-      line-height: 1.3;
-      min-width: 0;
-    }
-
-    .progress {
-      font-size: 14px;
-      font-weight: 700;
-      color: #0040d1;
-      flex-shrink: 0;
-      white-space: nowrap;
-    }
-
-    .content {
-      flex: 1;
-      display: flex;
-      min-height: 0;
-    }
-
-    .left {
-      width: 50%;
-      min-width: 0;
-      padding: 30px;
-      overflow: hidden;
-      border-right: 1px solid #eee;
-      background: #fff;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .left-body {
-      flex: 1;
-      min-height: 0;
-      overflow: auto;
-      scrollbar-width: none;
-      padding-right: 4px;
-    }
-
-    .left-body::-webkit-scrollbar {
-      display: none;
-    }
-
-    .left-actions {
-      display: flex;
-      gap: 10px;
-      padding-top: 18px;
-      margin-top: 18px;
-      border-top: 1px solid #edf0f4;
-      flex-wrap: wrap;
-      flex-shrink: 0;
-    }
-
-    .right {
-      width: 50%;
-      min-width: 0;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      min-height: 0;
-      background: #fafbfc;
-    }
-
-    .viewer {
-      flex: 1;
-      min-height: 0;
-      background: #fff;
-      border-radius: 16px;
-      border: 1px solid #e5e7eb;
-      overflow: hidden;
-    }
-
-    .viewer-frame {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      animation: fadeInContent 0.22s ease;
-    }
-
-    @keyframes fadeInContent {
-      from { opacity: 0.45; }
-      to { opacity: 1; }
-    }
-
-    .right-nav {
-      display: none;
-    }
-
-    .btn {
-      padding: 12px 16px;
-      border-radius: 12px;
-      border: none;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 700;
-      transition: all 0.2s ease;
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .btn-primary {
-      background: #0040d1;
-      color: #fff;
-    }
-
-    .btn-outline {
-      background: #fff;
-      color: #0040d1;
-      border: 1px solid #cfd8ff;
-    }
-
-    .btn-complete {
-      background: #111827;
-      color: #fff;
-    }
-
-    .loading-box {
-      width: 100%;
-      height: 100%;
-      min-height: 160px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #667085;
-      font-size: 14px;
-      text-align: center;
-      line-height: 1.7;
-    }
-
-    .viewer-frame > * {
-      width: 100%;
-      height: 100%;
-    }
-
-    .manual-step-view,
-    .manual-viewer,
-    .guide-wrapper,
-    .viewer,
-    .viewer-frame {
-      scrollbar-width: none;
-    }
-
-    .manual-step-view::-webkit-scrollbar,
-    .manual-viewer::-webkit-scrollbar,
-    .guide-wrapper::-webkit-scrollbar,
-    .viewer::-webkit-scrollbar,
-    .viewer-frame::-webkit-scrollbar {
-      display: none;
-    }
-
-    /* ================= HELP ================= */
-    .help-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(15, 23, 42, 0.25);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s ease;
-      z-index: 40;
-    }
-
-    .help-overlay.open {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .help-drawer {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: min(460px, 100%);
-      height: 100vh;
-      background: #fff;
-      box-shadow: -12px 0 28px rgba(15, 23, 42, 0.14);
-      transform: translateX(100%);
-      transition: transform 0.28s ease;
-      z-index: 50;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .help-drawer.open {
-      transform: translateX(0);
-    }
-
-    .help-drawer-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 24px;
-      border-bottom: 1px solid #edf0f4;
-      flex-shrink: 0;
-    }
-
-    .drawer-kicker {
-      font-size: 12px;
-      font-weight: 800;
-      color: #0040d1;
-      margin-bottom: 8px;
-    }
-
-    .drawer-title {
-      margin: 0;
-      font-size: 22px;
-      font-weight: 800;
-      color: #111827;
-      line-height: 1.3;
-    }
-
-    .help-drawer-body {
-      flex: 1;
-      overflow: auto;
-      padding: 20px;
-      scrollbar-width: none;
-    }
-
-    .help-drawer-body::-webkit-scrollbar {
-      display: none;
-    }
-
-    .faq-item {
-      border: 1px solid #e6ebf2;
-      border-radius: 14px;
-      background: #fff;
-      overflow: hidden;
-    }
-
-    .faq-item + .faq-item {
-      margin-top: 10px;
-    }
-
-    .faq-question {
-      width: 100%;
-      border: none;
-      background: #fff;
-      padding: 16px 18px;
-      text-align: left;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 700;
-      color: #111827;
-    }
-
-    .faq-question:hover {
-      background: #f8faff;
-    }
-
-    .faq-icon {
-      color: #0040d1;
-      font-size: 18px;
-      line-height: 1;
-      flex-shrink: 0;
-      transition: transform 0.2s ease;
-    }
-
-    .faq-answer {
-      display: none;
-      padding: 0 18px 18px;
-      font-size: 14px;
-      color: #4b5563;
-      line-height: 1.8;
-      background: #fff;
-    }
-
-    .faq-item.open .faq-answer {
-      display: block;
-    }
-
-    .faq-item.open .faq-icon {
-      transform: rotate(45deg);
-    }
-
-    @media (max-width: 1200px) {
-      html, body {
-        overflow: auto;
-      }
-
-      .app {
-        height: auto;
-        min-height: 100vh;
-        flex-direction: column;
-      }
-
-      .sidebar {
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px solid #eee;
-      }
-
-      .content {
-        flex-direction: column;
-      }
-
-      .left, .right {
-        width: 100%;
-      }
-
-      .left {
-        border-right: none;
-        border-bottom: 1px solid #eee;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .top {
-        padding: 16px 18px;
-      }
-
-      .left, .right {
-        padding: 18px;
-      }
-
-      .left-actions .btn {
-        flex: 1;
-      }
-
-      .title {
-        font-size: 20px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>N배송 가이드</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"/>
+
+<style>
+* { box-sizing: border-box; margin:0; padding:0; font-family:Pretendard, sans-serif; }
+
+html, body {
+  width:100%; height:100%;
+  background:#f6f8fb;
+  overflow:hidden;
+}
+
+.app { display:flex; height:100vh; }
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width:320px;
+  background:#fff;
+  border-right:1px solid #eee;
+  padding:20px;
+  overflow:auto;
+}
+
+.sidebar-brand {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:24px;
+}
+
+.sidebar-brand img { height:28px; }
+
+.sidebar-title {
+  font-size:18px;
+  font-weight:800;
+}
+
+.step { margin-bottom:22px; }
+
+.step-title {
+  font-weight:800;
+  font-size:14px;
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:8px;
+}
+
+.badge {
+  font-size:11px;
+  padding:4px 8px;
+  border-radius:999px;
+}
+
+.badge.done { background:#111; color:#fff; }
+.badge.ing { background:#0040d1; color:#fff; }
+.badge.wait { background:#e5e7eb; }
+
+.sub-item {
+  padding:10px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.sub-item.active {
+  background:#eef3ff;
+  color:#0040d1;
+  font-weight:700;
+}
+
+.optional {
+  font-size:11px;
+  color:#9ca3af;
+}
+
+/* ===== MAIN ===== */
+.main { flex:1; display:flex; flex-direction:column; }
+
+.top {
+  display:flex;
+  justify-content:space-between;
+  padding:20px 30px;
+  background:#fff;
+  border-bottom:1px solid #eee;
+}
+
+.title { font-size:20px; font-weight:800; }
+
+.progress { color:#0040d1; font-weight:700; }
+
+.content { flex:1; display:flex; }
+
+/* ===== LEFT ===== */
+.left {
+  width:50%;
+  padding:30px;
+  border-right:1px solid #eee;
+  display:flex;
+  flex-direction:column;
+  background:#fff;
+}
+
+.left-body {
+  flex:1;
+  overflow:auto;
+}
+
+.left-actions {
+  margin-top:20px;
+  display:flex;
+  gap:10px;
+}
+
+.btn {
+  flex:1;
+  padding:12px;
+  border-radius:10px;
+  font-weight:700;
+  cursor:pointer;
+  border:none;
+}
+
+.btn-primary { background:#0040d1; color:#fff; }
+.btn-outline { border:1px solid #0040d1; color:#0040d1; background:#fff; }
+
+/* ===== RIGHT ===== */
+.right {
+  width:50%;
+  padding:20px;
+  background:#f9fafc;
+}
+
+.viewer {
+  width:100%;
+  height:100%;
+  background:#fff;
+  border-radius:16px;
+  border:1px solid #e5e7eb;
+  overflow:hidden;
+}
+
+/* ===== HELP ===== */
+.help {
+  position:fixed;
+  right:0;
+  top:0;
+  width:420px;
+  height:100%;
+  background:#fff;
+  box-shadow:-10px 0 30px rgba(0,0,0,0.1);
+  transform:translateX(100%);
+  transition:0.3s;
+  padding:20px;
+  overflow:auto;
+}
+
+.help.open { transform:translateX(0); }
+
+.faq-item { margin-bottom:10px; border:1px solid #eee; border-radius:10px; }
+
+.faq-q {
+  padding:12px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.faq-a {
+  display:none;
+  padding:12px;
+  font-size:14px;
+}
+
+.faq-item.open .faq-a { display:block; }
+</style>
 </head>
+
 <body>
 
 <div class="app">
+
+  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-brand">
-      <img src="./Primary Logo.png" alt="품고 로고" onerror="this.style.display='none'">
-      <div class="sidebar-brand-text">
-        <h1 class="sidebar-brand-title">N배송 가이드</h1>
-        <p class="sidebar-brand-desc">단계별로 설정을 진행해주세요.</p>
-      </div>
+      <img src="./Primary Logo.png">
+      <div class="sidebar-title">N배송 가이드</div>
     </div>
 
     <div id="sidebar"></div>
   </aside>
 
+  <!-- MAIN -->
   <section class="main">
+
     <div class="top">
-      <div class="title" id="title">-</div>
-      <div class="progress" id="progress">진행률 0%</div>
+      <div class="title" id="title"></div>
+      <div class="progress" id="progress"></div>
     </div>
 
     <div class="content">
-      <section class="left">
+
+      <!-- LEFT -->
+      <div class="left">
         <div class="left-body" id="left"></div>
 
         <div class="left-actions">
           <button class="btn btn-outline" id="helpBtn">도움말</button>
           <button class="btn btn-primary" id="nextBtn">다음 단계</button>
         </div>
-      </section>
+      </div>
 
-      <section class="right">
+      <!-- RIGHT -->
+      <div class="right">
         <div class="viewer" id="right"></div>
-        <div class="right-nav"></div>
-      </section>
+      </div>
+
     </div>
   </section>
 </div>
 
-<div class="help-overlay" id="helpOverlay"></div>
-
-<aside class="help-drawer" id="helpDrawer" aria-hidden="true">
-  <div class="help-drawer-header">
-    <div>
-      <div class="drawer-kicker">도움말</div>
-      <h3 class="drawer-title" id="helpTitle">도움말</h3>
-    </div>
-    <button class="btn btn-outline" id="closeHelpBtn" type="button">닫기</button>
-  </div>
-
-  <div class="help-drawer-body" id="helpContent">
-    <div class="loading-box">도움말을 불러오는 중입니다...</div>
-  </div>
-</aside>
+<!-- HELP -->
+<div class="help" id="helpBox"></div>
 
 <script>
-  const STEPS = [
-    {
-      title: "STEP1. 품고 나우 설정",
-      items: [
-        {
-          title: "품고 나우 로그인",
-          required: true,
-          left: "./steps/step1-login-left.html",
-          right: "./steps/step1-login-right.html",
-          help: "./help/step1-help.html"
-        },
-        {
-          title: "구성원 추가",
-          required: false,
-          left: "./steps/step1-member-left.html",
-          right: "./steps/step1-member-right.html",
-          help: "./help/step1-member-help.html"
-        }
-      ]
-    },
-    {
-      title: "STEP2. 풀필먼트 연동",
-      items: [
-        {
-          title: "판매처 계정 등록",
-          required: true,
-          left: "./steps/step2-account-left.html",
-          right: "./steps/step2-account-right.html",
-          help: "./help/step2-account-help.html"
-        },
-        {
-          title: "풀필먼트 연동",
-          required: true,
-          left: "./steps/step2-fulfillment-left.html",
-          right: "./steps/step2-fulfillment-right.html",
-          help: "./help/step2-fulfillment-help.html"
-        },
-        {
-          title: "N배송 프로그램 약관 동의",
-          required: true,
-          left: "./steps/step2-terms-left.html",
-          right: "./steps/step2-terms-right.html",
-          help: "./help/step2-terms-help.html"
-        }
-      ]
-    },
-    {
-      title: "STEP3. SKU 등록",
-      items: [
-        {
-          title: "SKU 등록",
-          required: true,
-          left: "./steps/step3-sku-left.html",
-          right: "./steps/step3-sku-right.html",
-          help: "./help/step3-sku-help.html"
-        },
-        {
-          title: "상품 매핑",
-          required: true,
-          left: "./steps/step3-mapping-left.html",
-          right: "./steps/step3-mapping-right.html",
-          help: "./help/step3-mapping-help.html"
-        }
-      ]
-    },
-    {
-      title: "STEP4. 초도 입고",
-      items: [
-        {
-          title: "입고 가이드",
-          required: true,
-          left: "./steps/step4-inbound-left.html",
-          right: [
-            "./steps/step4-inbound-right-1.html",
-            "./steps/step4-inbound-right-2.html"
-          ],
-          help: "./help/step4-inbound-help.html"
-        },
-        {
-          title: "초도 입고 패킹리스트 제출하기",
-          required: true,
-          left: "./steps/step4-packing-left.html",
-          right: "./steps/step4-packing-right.html",
-          help: "./help/step4-packing-help.html"
-        }
-      ]
-    },
-    {
-      title: "STEP5. N배송 설정하기",
-      items: [
-        {
-          title: "N배송 설정하기",
-          required: true,
-          left: "./steps/step5-left.html",
-          right: "./steps/step5-right.html",
-          help: "./help/step5-help.html"
-        }
-      ]
-    }
-  ];
 
-  let currentStep = 0;
-  let currentItem = 0;
-  let currentSlide = 0;
-  const done = {};
-
-  const sidebarEl = document.getElementById("sidebar");
-  const titleEl = document.getElementById("title");
-  const progressEl = document.getElementById("progress");
-  const leftEl = document.getElementById("left");
-  const rightEl = document.getElementById("right");
-  const helpBtn = document.getElementById("helpBtn");
-  const nextBtn = document.getElementById("nextBtn");
-
-  const helpOverlay = document.getElementById("helpOverlay");
-  const helpDrawer = document.getElementById("helpDrawer");
-  const helpTitle = document.getElementById("helpTitle");
-  const helpContent = document.getElementById("helpContent");
-  const closeHelpBtn = document.getElementById("closeHelpBtn");
-
-  function currentItemData() {
-    return STEPS[currentStep].items[currentItem];
-  }
-
-  function normalizeRightFiles(right) {
-    if (Array.isArray(right)) return right;
-    if (typeof right === "string" && right.trim()) return [right];
-    return [];
-  }
-
-  function requiredItemsFlat() {
-    return STEPS.flatMap((step, sIdx) =>
-      step.items
-        .map((item, iIdx) => ({ ...item, key: `${sIdx}-${iIdx}` }))
-        .filter(item => item.required)
-    );
-  }
-
-  function renderSidebar() {
-    sidebarEl.innerHTML = "";
-
-    STEPS.forEach((step, sIdx) => {
-      const requiredIndices = step.items
-        .map((item, iIdx) => ({ item, iIdx }))
-        .filter(x => x.item.required);
-
-      const doneCount = requiredIndices.filter(x => done[`${sIdx}-${x.iIdx}`]).length;
-
-      let status = "wait";
-      if (requiredIndices.length > 0 && doneCount === requiredIndices.length) status = "done";
-      else if (sIdx === currentStep) status = "ing";
-
-      const stepEl = document.createElement("div");
-      stepEl.className = "step";
-
-      stepEl.innerHTML = `
-        <div class="step-title">
-          <span>${step.title}</span>
-          <span class="badge ${status}">
-            ${status === "done" ? "완료" : status === "ing" ? "진행중" : "대기중"}
-          </span>
-        </div>
-      `;
-
-      const sub = document.createElement("div");
-      sub.className = "sub";
-
-      step.items.forEach((item, iIdx) => {
-        const itemEl = document.createElement("div");
-        itemEl.className = "sub-item" + (sIdx === currentStep && iIdx === currentItem ? " active" : "");
-        itemEl.innerHTML = `
-          <span>
-            ${item.title}
-            ${!item.required ? '<span class="optional">선택</span>' : ''}
-          </span>
-        `;
-        itemEl.addEventListener("click", () => {
-          currentStep = sIdx;
-          currentItem = iIdx;
-          currentSlide = 0;
-          render();
-        });
-        sub.appendChild(itemEl);
-      });
-
-      stepEl.appendChild(sub);
-      sidebarEl.appendChild(stepEl);
-    });
-  }
-
-  async function loadHTML(path) {
-    if (!path) return "";
-    const res = await fetch(path + "?v=" + Date.now(), { cache: "no-store" });
-    if (!res.ok) throw new Error(`파일을 불러오지 못했습니다: ${path}`);
-    return await res.text();
-  }
-
-  async function renderHelp() {
-    const item = currentItemData();
-    helpTitle.textContent = item.title;
-
-    try {
-      const html = await loadHTML(item.help);
-      helpContent.innerHTML = html;
-      bindFaqToggle();
-    } catch (e) {
-      helpContent.innerHTML = `<div class="loading-box">${e.message}</div>`;
-    }
-  }
-
-  function bindFaqToggle() {
-    const buttons = helpContent.querySelectorAll("[data-faq-question]");
-    buttons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        const item = btn.closest(".faq-item");
-        if (item) item.classList.toggle("open");
-      });
-    });
-  }
-
-  function renderProgress() {
-    const total = requiredItemsFlat().length;
-    const doneCount = requiredItemsFlat().filter(item => done[item.key]).length;
-    const percent = total === 0 ? 0 : Math.floor((doneCount / total) * 100);
-    progressEl.textContent = `진행률 ${percent}%`;
-  }
-
-  async function render() {
-    renderSidebar();
-    renderProgress();
-
-    const item = currentItemData();
-    const rightFiles = normalizeRightFiles(item.right);
-
-    if (currentSlide >= rightFiles.length) {
-      currentSlide = 0;
-    }
-
-    titleEl.textContent = item.title;
-
-    try {
-      leftEl.innerHTML = await loadHTML(item.left);
-    } catch (e) {
-      leftEl.innerHTML = `<div class="loading-box">${e.message}</div>`;
-    }
-
-    try {
-      if (rightFiles.length > 0) {
-        rightEl.innerHTML = `<div class="viewer-frame">${await loadHTML(rightFiles[currentSlide])}</div>`;
-      } else {
-        rightEl.innerHTML = `<div class="loading-box">등록된 화면이 없습니다.</div>`;
+const STEPS = [
+  {
+    title:"STEP1. 품고 나우 설정",
+    items:[
+      {
+        title:"품고 나우 로그인",
+        required:true,
+        left:"./steps/step1-login-left.html",
+        right:"./steps/step1-login-right-player.html",
+        help:"./help/step1-help.html"
+      },
+      {
+        title:"구성원 추가",
+        required:false,
+        left:"./steps/step1-member-left.html",
+        right:"./steps/step1-member-right-player.html",
+        help:"./help/step1-member-help.html"
       }
-    } catch (e) {
-      rightEl.innerHTML = `<div class="loading-box">${e.message}</div>`;
-    }
-
-    await renderHelp();
-
-    if (currentStep === STEPS.length - 1 && currentItem === STEPS[currentStep].items.length - 1) {
-      nextBtn.textContent = "가이드 완료";
-      nextBtn.classList.add("btn-complete");
-      nextBtn.classList.remove("btn-primary");
-    } else {
-      nextBtn.textContent = "다음 단계";
-      nextBtn.classList.add("btn-primary");
-      nextBtn.classList.remove("btn-complete");
-    }
+    ]
   }
+];
 
-  function goNextContent() {
-    const item = currentItemData();
-    const rightFiles = normalizeRightFiles(item.right);
+let step = 0;
+let item = 0;
+const done = {};
 
-    if (rightFiles.length > 1 && currentSlide < rightFiles.length - 1) {
-      currentSlide += 1;
-      render();
-      return;
-    }
+const sidebar = document.getElementById("sidebar");
+const left = document.getElementById("left");
+const right = document.getElementById("right");
+const title = document.getElementById("title");
+const progress = document.getElementById("progress");
+const helpBox = document.getElementById("helpBox");
 
-    if (item.required) {
-      done[`${currentStep}-${currentItem}`] = true;
-    }
+function renderSidebar() {
+  sidebar.innerHTML = "";
 
-    currentSlide = 0;
+  STEPS.forEach((s, si)=>{
+    const el = document.createElement("div");
+    el.className="step";
 
-    if (currentItem < STEPS[currentStep].items.length - 1) {
-      currentItem += 1;
-      render();
-      return;
-    }
+    el.innerHTML = `
+      <div class="step-title">
+        ${s.title}
+        <span class="badge ${si===step?'ing':'wait'}">${si===step?'진행중':'대기중'}</span>
+      </div>
+    `;
 
-    if (currentStep < STEPS.length - 1) {
-      currentStep += 1;
-      currentItem = 0;
-      render();
-      return;
-    }
+    s.items.forEach((it, ii)=>{
+      const sub = document.createElement("div");
+      sub.className="sub-item"+(si===step&&ii===item?" active":"");
+      sub.innerHTML = `${it.title} ${!it.required?'<span class="optional">선택</span>':''}`;
+      sub.onclick=()=>{
+        step=si; item=ii;
+        render();
+      };
+      el.appendChild(sub);
+    });
 
-    alert("수고하셨습니다! 가이드 확인이 완료되었습니다.");
-  }
-
-  function openHelp() {
-    helpOverlay.classList.add("open");
-    helpDrawer.classList.add("open");
-    document.body.classList.add("help-open");
-  }
-
-  function closeHelp() {
-    helpOverlay.classList.remove("open");
-    helpDrawer.classList.remove("open");
-    document.body.classList.remove("help-open");
-  }
-
-  nextBtn.addEventListener("click", goNextContent);
-  helpBtn.addEventListener("click", openHelp);
-  closeHelpBtn.addEventListener("click", closeHelp);
-  helpOverlay.addEventListener("click", closeHelp);
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeHelp();
+    sidebar.appendChild(el);
   });
+}
 
+async function load(path){
+  const res = await fetch(path+"?v="+Date.now());
+  return await res.text();
+}
+
+async function render(){
+  renderSidebar();
+
+  const data = STEPS[step].items[item];
+
+  title.innerText = data.title;
+
+  left.innerHTML = await load(data.left);
+
+  // 🔥 핵심: 무조건 iframe
+  right.innerHTML = `
+    <iframe 
+      src="${data.right}"
+      style="width:100%;height:100%;border:0;"
+    ></iframe>
+  `;
+
+  helpBox.innerHTML = await load(data.help);
+
+  bindFAQ();
+
+  progress.innerText = "진행률 계산 생략 (원하면 추가해줌)";
+}
+
+function bindFAQ(){
+  document.querySelectorAll(".faq-q").forEach(q=>{
+    q.onclick=()=>q.parentElement.classList.toggle("open");
+  });
+}
+
+document.getElementById("nextBtn").onclick=()=>{
+  item++;
+  if(item>=STEPS[step].items.length){
+    step++;
+    item=0;
+  }
   render();
+};
+
+document.getElementById("helpBtn").onclick=()=>{
+  helpBox.classList.toggle("open");
+};
+
+render();
+
 </script>
 
 </body>
