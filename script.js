@@ -4,25 +4,17 @@ const GUIDE_STEPS = [
   shortLabel: "STEP1",
   hasSubSteps: true,
   subSteps: [
-    {
-      title: "품고 나우 로그인",
-      leftFile: "./steps/step1-login-left.html",
-      rightFiles: [
-        "./steps/step1-login-right-1.html",
-        "./steps/step1-login-right-2.html",
-        "./steps/step1-login-right-3.html"
-      ],
-      helpFile: "./help/step1-help.html"
-    },
-    {
-      title: "구성원 추가",
-      leftFile: "./steps/step1-member-left.html",
-      rightFiles: [
-        "./steps/step1-member-right-1.html"
-      ],
-      helpFile: "./help/step1-member-help.html"
-    }
-  ]
+{
+  title: "품고 나우 로그인",
+  leftFile: "./steps/step1-login-left.html",
+  rightFile: "./steps/step1-login-right.html",
+  helpFile: "./help/step1-help.html"
+},
+{
+  title: "구성원 추가",
+  leftFile: "./steps/step1-member-left.html",
+  rightFile: "./steps/step1-member-right.html",
+  helpFile: "./help/step1-member-help.html"
 }
   {
     id: 2,
