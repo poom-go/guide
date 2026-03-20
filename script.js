@@ -7,13 +7,13 @@ const GUIDE_STEPS = [
 {
   title: "품고 나우 로그인",
   leftFile: "./steps/step1-login-left.html",
-  rightFile: "./steps/step1-login-right.html",
+  rightFile: "./steps/step1-login-right-player.html",
   helpFile: "./help/step1-help.html"
 },
 {
   title: "구성원 추가",
   leftFile: "./steps/step1-member-left.html",
-  rightFile: "./steps/step1-member-right.html",
+  rightFile: "./steps/step1-member--player.html",
   helpFile: "./help/step1-member-help.html"
 }
   {
