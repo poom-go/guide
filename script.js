@@ -17,16 +17,30 @@ const GUIDE_STEPS = [
   helpFile: "./help/step1-member-help.html"
 }
   {
-    id: 2,
-    name: "STEP 2",
+  shortLabel: "STEP2",
+  hasSubSteps: true,
+  subSteps: [
+ {
     title: "판매처 등록",
-    leftFile: "./steps/step2-left.html",
-    rightFiles: [
-      "./steps/step2-right-1.html",
-      "./steps/step2-right-2.html"
-    ],
-    helpFile: "./help/step2-help.html"
+    subSteps: [
+    leftFile: "./steps/step2-new-left.html",
+    rightFiles: "./steps/step2-new-right-player.html",
+    helpFile: "./help/step2-new-help.html"
   },
+ {
+    title: "풀필먼트 연동",
+    subSteps: [
+    leftFile: "./steps/step2-api-left.html",
+    rightFiles: "./steps/step2-api-right-player.html",
+    helpFile: "./help/step2-api-help.html"
+  },    
+ {
+    title: "N배송 프로그램 이용 동의",
+    subSteps: [
+    leftFile: "./steps/step2-npro-left.html",
+    rightFiles: "./steps/step2-npro-right-player.html",
+    helpFile: "./help/step2-npro-help.html"
+  }    
   {
     id: 3,
     name: "STEP 3",
