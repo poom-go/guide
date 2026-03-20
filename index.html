@@ -17,6 +17,10 @@ html, body {
   overflow:hidden;
 }
 
+body.video-modal-open {
+  overflow:hidden;
+}
+
 .app {
   display:flex;
   height:100vh;
@@ -202,12 +206,64 @@ html, body {
   overflow:hidden;
 }
 
-.viewer iframe {
+/* ===== RIGHT VIDEO CARD ===== */
+.video-guide-card {
   width:100%;
   height:100%;
-  border:0;
-  display:block;
   background:#fff;
+  border-radius:16px;
+  border:1px solid #e5e7eb;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:32px;
+  text-align:center;
+}
+
+.video-guide-icon {
+  width:72px;
+  height:72px;
+  border-radius:999px;
+  background:#eef4ff;
+  color:#0040d1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  font-weight:800;
+  margin-bottom:18px;
+}
+
+.video-guide-title {
+  font-size:22px;
+  font-weight:800;
+  color:#111827;
+  margin-bottom:10px;
+}
+
+.video-guide-desc {
+  font-size:15px;
+  line-height:1.8;
+  color:#4b5563;
+  margin-bottom:24px;
+  max-width:460px;
+}
+
+.video-guide-btn {
+  border:none;
+  background:#0040d1;
+  color:#fff;
+  border-radius:12px;
+  padding:14px 24px;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 10px 24px rgba(0, 64, 209, 0.18);
+}
+
+.video-guide-btn:hover {
+  filter:brightness(0.98);
 }
 
 /* ===== HELP ===== */
@@ -259,6 +315,129 @@ html, body {
 .faq-item.open .faq-a {
   display:block;
 }
+
+/* ===== VIDEO MODAL ===== */
+.video-modal {
+  position:fixed;
+  inset:0;
+  display:none;
+  z-index:2000;
+}
+
+.video-modal.open {
+  display:block;
+}
+
+.video-modal-dim {
+  position:absolute;
+  inset:0;
+  background:rgba(15, 23, 42, 0.62);
+}
+
+.video-modal-dialog {
+  position:relative;
+  z-index:2;
+  width:min(1400px, calc(100vw - 60px));
+  height:min(900px, calc(100vh - 60px));
+  margin:30px auto;
+  background:#fff;
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 24px 60px rgba(0, 0, 0, 0.28);
+  display:flex;
+  flex-direction:column;
+}
+
+.video-modal-header {
+  height:64px;
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 20px 0 24px;
+  border-bottom:1px solid #e5e7eb;
+  background:#fff;
+}
+
+.video-modal-title {
+  font-size:18px;
+  font-weight:800;
+  color:#111827;
+}
+
+.video-modal-close {
+  width:40px;
+  height:40px;
+  border:none;
+  border-radius:999px;
+  background:#f3f4f6;
+  color:#111827;
+  font-size:24px;
+  line-height:1;
+  cursor:pointer;
+}
+
+.video-modal-body {
+  flex:1;
+  min-height:0;
+  background:#f8fafc;
+}
+
+.video-modal-body iframe {
+  width:100%;
+  height:100%;
+  border:0;
+  display:block;
+  background:#f8fafc;
+}
+
+@media (max-width: 1280px) {
+  .content {
+    flex-direction:column;
+  }
+
+  .left, .right {
+    width:100%;
+  }
+
+  .left {
+    border-right:none;
+    border-bottom:1px solid #eee;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width:260px;
+  }
+
+  .top {
+    padding:16px 20px;
+  }
+
+  .left, .right {
+    padding:16px;
+  }
+
+  .help {
+    width:100%;
+  }
+
+  .video-modal-dialog {
+    width:calc(100vw - 20px);
+    height:calc(100vh - 20px);
+    margin:10px auto;
+    border-radius:16px;
+  }
+
+  .video-guide-card {
+    padding:20px;
+  }
+
+  .video-guide-title {
+    font-size:18px;
+  }
+}
 </style>
 </head>
 
@@ -307,6 +486,29 @@ html, body {
 
 <!-- HELP -->
 <div class="help" id="helpBox"></div>
+
+<!-- VIDEO MODAL -->
+<div class="video-modal" id="videoModal">
+  <div class="video-modal-dim" id="videoModalDim"></div>
+
+  <div class="video-modal-dialog">
+    <div class="video-modal-header">
+      <div class="video-modal-title" id="videoModalTitle">과정 영상</div>
+      <button type="button" class="video-modal-close" id="videoModalClose">×</button>
+    </div>
+
+    <div class="video-modal-body">
+      <iframe
+        id="videoModalFrame"
+        src=""
+        title="과정 영상"
+        loading="eager"
+        referrerpolicy="no-referrer"
+        allow="autoplay"
+      ></iframe>
+    </div>
+  </div>
+</div>
 
 <script>
 const STEPS = [
@@ -420,6 +622,12 @@ const helpBox = document.getElementById("helpBox");
 const nextBtn = document.getElementById("nextBtn");
 const helpBtn = document.getElementById("helpBtn");
 
+const videoModal = document.getElementById("videoModal");
+const videoModalDim = document.getElementById("videoModalDim");
+const videoModalClose = document.getElementById("videoModalClose");
+const videoModalTitle = document.getElementById("videoModalTitle");
+const videoModalFrame = document.getElementById("videoModalFrame");
+
 function getRequiredItems() {
   return STEPS.flatMap((s, si) =>
     s.items
@@ -490,6 +698,19 @@ function bindFAQ() {
   });
 }
 
+function openVideoModal(titleText, src) {
+  videoModalTitle.textContent = `${titleText} 과정 영상`;
+  videoModalFrame.src = `${src}?v=${Date.now()}`;
+  videoModal.classList.add("open");
+  document.body.classList.add("video-modal-open");
+}
+
+function closeVideoModal() {
+  videoModal.classList.remove("open");
+  videoModalFrame.src = "";
+  document.body.classList.remove("video-modal-open");
+}
+
 function renderProgress() {
   const required = getRequiredItems();
   const total = required.length;
@@ -499,6 +720,7 @@ function renderProgress() {
 }
 
 async function render() {
+  closeVideoModal();
   renderSidebar();
   renderProgress();
 
@@ -512,15 +734,21 @@ async function render() {
   }
 
   right.innerHTML = `
-    <iframe
-      src="${data.right}?v=${Date.now()}"
-      title="${data.title}"
-      style="width:100%;height:100%;border:0;"
-      loading="eager"
-      referrerpolicy="no-referrer"
-      allow="autoplay"
-    ></iframe>
+    <div class="video-guide-card">
+      <div class="video-guide-icon">▶</div>
+      <div class="video-guide-title">과정 영상 보기</div>
+      <div class="video-guide-desc">
+        실제 화면 흐름이 궁금하시면 과정 영상을 열어 확인해주세요.<br>
+        팝업으로 크게 열리므로 화면이 잘리거나 축소되지 않습니다.
+      </div>
+      <button type="button" class="video-guide-btn" id="openVideoBtn">과정 영상 보기</button>
+    </div>
   `;
+
+  const openBtn = document.getElementById("openVideoBtn");
+  if (openBtn) {
+    openBtn.onclick = () => openVideoModal(data.title, data.right);
+  }
 
   try {
     helpBox.innerHTML = await load(data.help);
@@ -570,6 +798,16 @@ nextBtn.onclick = () => {
   render();
   alert("수고하셨습니다! 가이드 확인이 완료되었습니다.");
 };
+
+videoModalClose.addEventListener("click", closeVideoModal);
+videoModalDim.addEventListener("click", closeVideoModal);
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    helpBox.classList.remove("open");
+    closeVideoModal();
+  }
+});
 
 render();
 </script>
