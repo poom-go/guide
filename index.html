@@ -11,12 +11,16 @@
 * { box-sizing: border-box; margin:0; padding:0; font-family:Pretendard, sans-serif; }
 
 html, body {
-  width:100%; height:100%;
+  width:100%;
+  height:100%;
   background:#f6f8fb;
   overflow:hidden;
 }
 
-.app { display:flex; height:100vh; }
+.app {
+  display:flex;
+  height:100vh;
+}
 
 /* ===== SIDEBAR ===== */
 .sidebar {
@@ -34,38 +38,54 @@ html, body {
   margin-bottom:24px;
 }
 
-.sidebar-brand img { height:28px; }
+.sidebar-brand img {
+  height:28px;
+  width:auto;
+  object-fit:contain;
+}
 
 .sidebar-title {
   font-size:18px;
   font-weight:800;
 }
 
-.step { margin-bottom:22px; }
+.step {
+  margin-bottom:22px;
+}
 
 .step-title {
   font-weight:800;
   font-size:14px;
   display:flex;
   justify-content:space-between;
+  align-items:flex-start;
+  gap:8px;
   margin-bottom:8px;
+  line-height:1.4;
 }
 
 .badge {
   font-size:11px;
   padding:4px 8px;
   border-radius:999px;
+  white-space:nowrap;
+  flex-shrink:0;
 }
 
 .badge.done { background:#111; color:#fff; }
 .badge.ing { background:#0040d1; color:#fff; }
-.badge.wait { background:#e5e7eb; }
+.badge.wait { background:#e5e7eb; color:#555; }
 
 .sub-item {
   padding:10px;
   border-radius:8px;
   cursor:pointer;
   font-size:14px;
+  line-height:1.4;
+}
+
+.sub-item:hover {
+  background:#f4f7ff;
 }
 
 .sub-item.active {
@@ -77,24 +97,44 @@ html, body {
 .optional {
   font-size:11px;
   color:#9ca3af;
+  margin-left:6px;
 }
 
 /* ===== MAIN ===== */
-.main { flex:1; display:flex; flex-direction:column; }
+.main {
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+}
 
 .top {
   display:flex;
   justify-content:space-between;
+  align-items:center;
+  gap:16px;
   padding:20px 30px;
   background:#fff;
   border-bottom:1px solid #eee;
 }
 
-.title { font-size:20px; font-weight:800; }
+.title {
+  font-size:20px;
+  font-weight:800;
+  line-height:1.3;
+}
 
-.progress { color:#0040d1; font-weight:700; }
+.progress {
+  color:#0040d1;
+  font-weight:700;
+  white-space:nowrap;
+}
 
-.content { flex:1; display:flex; }
+.content {
+  flex:1;
+  display:flex;
+  min-height:0;
+}
 
 /* ===== LEFT ===== */
 .left {
@@ -104,17 +144,20 @@ html, body {
   display:flex;
   flex-direction:column;
   background:#fff;
+  min-width:0;
 }
 
 .left-body {
   flex:1;
   overflow:auto;
+  min-height:0;
 }
 
 .left-actions {
   margin-top:20px;
   display:flex;
   gap:10px;
+  flex-shrink:0;
 }
 
 .btn {
@@ -126,14 +169,28 @@ html, body {
   border:none;
 }
 
-.btn-primary { background:#0040d1; color:#fff; }
-.btn-outline { border:1px solid #0040d1; color:#0040d1; background:#fff; }
+.btn-primary {
+  background:#0040d1;
+  color:#fff;
+}
+
+.btn-outline {
+  border:1px solid #0040d1;
+  color:#0040d1;
+  background:#fff;
+}
+
+.btn-complete {
+  background:#111827;
+  color:#fff;
+}
 
 /* ===== RIGHT ===== */
 .right {
   width:50%;
   padding:20px;
   background:#f9fafc;
+  min-width:0;
 }
 
 .viewer {
@@ -143,6 +200,14 @@ html, body {
   border-radius:16px;
   border:1px solid #e5e7eb;
   overflow:hidden;
+}
+
+.viewer iframe {
+  width:100%;
+  height:100%;
+  border:0;
+  display:block;
+  background:#fff;
 }
 
 /* ===== HELP ===== */
@@ -158,25 +223,42 @@ html, body {
   transition:0.3s;
   padding:20px;
   overflow:auto;
+  z-index:100;
 }
 
-.help.open { transform:translateX(0); }
+.help.open {
+  transform:translateX(0);
+}
 
-.faq-item { margin-bottom:10px; border:1px solid #eee; border-radius:10px; }
+.faq-item {
+  margin-bottom:10px;
+  border:1px solid #eee;
+  border-radius:10px;
+  overflow:hidden;
+}
 
 .faq-q {
   padding:12px;
   font-weight:700;
   cursor:pointer;
+  background:#fff;
+}
+
+.faq-q:hover {
+  background:#f8faff;
 }
 
 .faq-a {
   display:none;
   padding:12px;
   font-size:14px;
+  line-height:1.8;
+  color:#4b5563;
 }
 
-.faq-item.open .faq-a { display:block; }
+.faq-item.open .faq-a {
+  display:block;
+}
 </style>
 </head>
 
@@ -187,7 +269,7 @@ html, body {
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-brand">
-      <img src="./Primary Logo.png">
+      <img src="./Primary Logo.png" alt="Primary Logo" onerror="this.style.display='none'">
       <div class="sidebar-title">N배송 가이드</div>
     </div>
 
@@ -209,8 +291,8 @@ html, body {
         <div class="left-body" id="left"></div>
 
         <div class="left-actions">
-          <button class="btn btn-outline" id="helpBtn">도움말</button>
-          <button class="btn btn-primary" id="nextBtn">다음 단계</button>
+          <button class="btn btn-outline" id="helpBtn" type="button">도움말</button>
+          <button class="btn btn-primary" id="nextBtn" type="button">다음 단계</button>
         </div>
       </div>
 
@@ -227,24 +309,99 @@ html, body {
 <div class="help" id="helpBox"></div>
 
 <script>
-
 const STEPS = [
   {
-    title:"STEP1. 품고 나우 설정",
-    items:[
+    title: "STEP1. 품고 나우 설정",
+    items: [
       {
-        title:"품고 나우 로그인",
-        required:true,
-        left:"./steps/step1-login-left.html",
-        right:"./steps/step1-login-right-player.html",
-        help:"./help/step1-help.html"
+        title: "품고 나우 로그인",
+        required: true,
+        left: "./steps/step1-login-left.html",
+        right: "./steps/step1-login-right-player.html",
+        help: "./help/step1-help.html"
       },
       {
-        title:"구성원 추가",
-        required:false,
-        left:"./steps/step1-member-left.html",
-        right:"./steps/step1-member-right-player.html",
-        help:"./help/step1-member-help.html"
+        title: "구성원 추가",
+        required: false,
+        left: "./steps/step1-member-left.html",
+        right: "./steps/step1-member-right-player.html",
+        help: "./help/step1-member-help.html"
+      }
+    ]
+  },
+  {
+    title: "STEP2. 풀필먼트 연동",
+    items: [
+      {
+        title: "판매처 계정 등록",
+        required: true,
+        left: "./steps/step2-account-left.html",
+        right: "./steps/step2-account-right-player.html",
+        help: "./help/step2-account-help.html"
+      },
+      {
+        title: "풀필먼트 연동",
+        required: true,
+        left: "./steps/step2-fulfillment-left.html",
+        right: "./steps/step2-fulfillment-right-player.html",
+        help: "./help/step2-fulfillment-help.html"
+      },
+      {
+        title: "N배송 프로그램 약관 동의",
+        required: true,
+        left: "./steps/step2-terms-left.html",
+        right: "./steps/step2-terms-right-player.html",
+        help: "./help/step2-terms-help.html"
+      }
+    ]
+  },
+  {
+    title: "STEP3. SKU 등록",
+    items: [
+      {
+        title: "SKU 등록",
+        required: true,
+        left: "./steps/step3-sku-left.html",
+        right: "./steps/step3-sku-right-player.html",
+        help: "./help/step3-sku-help.html"
+      },
+      {
+        title: "상품 매핑",
+        required: true,
+        left: "./steps/step3-mapping-left.html",
+        right: "./steps/step3-mapping-right-player.html",
+        help: "./help/step3-mapping-help.html"
+      }
+    ]
+  },
+  {
+    title: "STEP4. 초도 입고",
+    items: [
+      {
+        title: "입고 가이드",
+        required: true,
+        left: "./steps/step4-inbound-left.html",
+        right: "./steps/step4-inbound-right-player.html",
+        help: "./help/step4-inbound-help.html"
+      },
+      {
+        title: "초도 입고 패킹리스트 제출하기",
+        required: true,
+        left: "./steps/step4-packing-left.html",
+        right: "./steps/step4-packing-right-player.html",
+        help: "./help/step4-packing-help.html"
+      }
+    ]
+  },
+  {
+    title: "STEP5. N배송 설정하기",
+    items: [
+      {
+        title: "N배송 설정하기",
+        required: true,
+        left: "./steps/step5-left.html",
+        right: "./steps/step5-right-player.html",
+        help: "./help/step5-help.html"
       }
     ]
   }
@@ -260,27 +417,56 @@ const right = document.getElementById("right");
 const title = document.getElementById("title");
 const progress = document.getElementById("progress");
 const helpBox = document.getElementById("helpBox");
+const nextBtn = document.getElementById("nextBtn");
+const helpBtn = document.getElementById("helpBtn");
+
+function getRequiredItems() {
+  return STEPS.flatMap((s, si) =>
+    s.items
+      .map((it, ii) => ({ ...it, key: `${si}-${ii}` }))
+      .filter(it => it.required)
+  );
+}
+
+function getStepStatus(si) {
+  const requiredItems = STEPS[si].items
+    .map((it, ii) => ({ ...it, idx: ii }))
+    .filter(it => it.required);
+
+  if (requiredItems.length === 0) return "wait";
+
+  const doneCount = requiredItems.filter(it => done[`${si}-${it.idx}`]).length;
+
+  if (doneCount === requiredItems.length) return "done";
+  if (si === step) return "ing";
+  return "wait";
+}
 
 function renderSidebar() {
   sidebar.innerHTML = "";
 
-  STEPS.forEach((s, si)=>{
+  STEPS.forEach((s, si) => {
+    const status = getStepStatus(si);
+
     const el = document.createElement("div");
-    el.className="step";
+    el.className = "step";
 
     el.innerHTML = `
       <div class="step-title">
-        ${s.title}
-        <span class="badge ${si===step?'ing':'wait'}">${si===step?'진행중':'대기중'}</span>
+        <span>${s.title}</span>
+        <span class="badge ${status}">
+          ${status === "done" ? "완료" : status === "ing" ? "진행중" : "대기중"}
+        </span>
       </div>
     `;
 
-    s.items.forEach((it, ii)=>{
+    s.items.forEach((it, ii) => {
       const sub = document.createElement("div");
-      sub.className="sub-item"+(si===step&&ii===item?" active":"");
-      sub.innerHTML = `${it.title} ${!it.required?'<span class="optional">선택</span>':''}`;
-      sub.onclick=()=>{
-        step=si; item=ii;
+      sub.className = "sub-item" + (si === step && ii === item ? " active" : "");
+      sub.innerHTML = `${it.title}${!it.required ? '<span class="optional"> 선택</span>' : ""}`;
+      sub.onclick = () => {
+        step = si;
+        item = ii;
         render();
       };
       el.appendChild(sub);
@@ -290,56 +476,102 @@ function renderSidebar() {
   });
 }
 
-async function load(path){
-  const res = await fetch(path+"?v="+Date.now());
+async function load(path) {
+  const res = await fetch(path + "?v=" + Date.now(), { cache: "no-store" });
+  if (!res.ok) {
+    throw new Error(`파일을 불러오지 못했습니다: ${path}`);
+  }
   return await res.text();
 }
 
-async function render(){
-  renderSidebar();
-
-  const data = STEPS[step].items[item];
-
-  title.innerText = data.title;
-
-  left.innerHTML = await load(data.left);
-
-  // 🔥 핵심: 무조건 iframe
-  right.innerHTML = `
-    <iframe 
-      src="${data.right}"
-      style="width:100%;height:100%;border:0;"
-    ></iframe>
-  `;
-
-  helpBox.innerHTML = await load(data.help);
-
-  bindFAQ();
-
-  progress.innerText = "진행률 계산 생략 (원하면 추가해줌)";
-}
-
-function bindFAQ(){
-  document.querySelectorAll(".faq-q").forEach(q=>{
-    q.onclick=()=>q.parentElement.classList.toggle("open");
+function bindFAQ() {
+  document.querySelectorAll(".faq-q").forEach(q => {
+    q.onclick = () => q.parentElement.classList.toggle("open");
   });
 }
 
-document.getElementById("nextBtn").onclick=()=>{
-  item++;
-  if(item>=STEPS[step].items.length){
-    step++;
-    item=0;
-  }
-  render();
-};
+function renderProgress() {
+  const required = getRequiredItems();
+  const total = required.length;
+  const completed = required.filter(it => done[it.key]).length;
+  const percent = total === 0 ? 0 : Math.floor((completed / total) * 100);
+  progress.innerText = `진행률 ${percent}%`;
+}
 
-document.getElementById("helpBtn").onclick=()=>{
+async function render() {
+  renderSidebar();
+  renderProgress();
+
+  const data = STEPS[step].items[item];
+  title.innerText = data.title;
+
+  try {
+    left.innerHTML = await load(data.left);
+  } catch (e) {
+    left.innerHTML = `<div style="color:#ef4444;font-size:14px;">${e.message}</div>`;
+  }
+
+  right.innerHTML = `
+    <iframe
+      src="${data.right}?v=${Date.now()}"
+      title="${data.title}"
+      style="width:100%;height:100%;border:0;"
+      loading="eager"
+      referrerpolicy="no-referrer"
+      allow="autoplay"
+    ></iframe>
+  `;
+
+  try {
+    helpBox.innerHTML = await load(data.help);
+    bindFAQ();
+  } catch (e) {
+    helpBox.innerHTML = `<div style="color:#ef4444;font-size:14px;">${e.message}</div>`;
+  }
+
+  const isLastStep = step === STEPS.length - 1;
+  const isLastItem = item === STEPS[step].items.length - 1;
+
+  if (isLastStep && isLastItem) {
+    nextBtn.textContent = "가이드 완료";
+    nextBtn.classList.add("btn-complete");
+    nextBtn.classList.remove("btn-primary");
+  } else {
+    nextBtn.textContent = "다음 단계";
+    nextBtn.classList.add("btn-primary");
+    nextBtn.classList.remove("btn-complete");
+  }
+}
+
+helpBtn.onclick = () => {
   helpBox.classList.toggle("open");
 };
 
-render();
+nextBtn.onclick = () => {
+  const current = STEPS[step].items[item];
 
+  if (current.required) {
+    done[`${step}-${item}`] = true;
+  }
+
+  if (item < STEPS[step].items.length - 1) {
+    item++;
+    render();
+    return;
+  }
+
+  if (step < STEPS.length - 1) {
+    step++;
+    item = 0;
+    render();
+    return;
+  }
+
+  render();
+  alert("수고하셨습니다! 가이드 확인이 완료되었습니다.");
+};
+
+render();
 </script>
 
 </body>
