@@ -6,12 +6,7 @@
   <title>구성원 등록 과정 영상</title>
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Pretendard', sans-serif;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
 
     html, body {
       width: 100%;
@@ -21,24 +16,22 @@
     }
 
     body {
-      display: block;
+      margin: 0;
     }
 
     .player-stage {
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
       background: #f1f3f5;
-      position: relative;
     }
 
     .player-scale {
       transform-origin: center center;
       will-change: transform;
-      display: inline-block;
     }
 
     .guide-container {
@@ -52,7 +45,6 @@
       border: 1px solid #e9ecef;
     }
 
-    /* 클릭 안내 */
     #click-hint {
       position: absolute;
       background: #0040D1;
@@ -80,11 +72,10 @@
       border-radius: 4px;
     }
 
-    /* 시작 레이어 */
     .play-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.92);
       z-index: 2000;
       display: flex;
       justify-content: center;
@@ -104,16 +95,18 @@
       font-size: 18px;
       font-weight: 700;
       cursor: pointer;
+      box-shadow: 0 10px 24px rgba(0,64,209,0.24);
     }
 
-    /* 좌우 레이아웃 */
-    .app-shell {
+    .btn-start:hover {
+      filter: brightness(0.98);
+    }
+
+    .main-shell {
       display: flex;
       height: 100%;
-      width: 100%;
     }
 
-    /* 사이드바 */
     .sidebar {
       width: 280px;
       background: #fff;
@@ -124,16 +117,8 @@
       overflow-y: auto;
     }
 
-    .sidebar-header {
-      height: 40px;
-    }
-
-    .menu-title {
-      font-size: 13px;
-      color: #adb5bd;
-      padding: 25px 24px 10px;
-      font-weight: 700;
-    }
+    .sidebar-header { height: 40px; }
+    .menu-title { font-size: 13px; color: #adb5bd; padding: 25px 24px 10px; font-weight: 700; }
 
     .menu-item {
       display: flex;
@@ -162,9 +147,7 @@
       text-align: center;
     }
 
-    .sub-menu-list {
-      width: 100%;
-    }
+    .sub-menu-list { width: 100%; }
 
     .sub-item {
       padding: 10px 24px 10px 62px;
@@ -183,7 +166,6 @@
       width: calc(100% - 15px);
     }
 
-    /* 메인 */
     .content-area {
       flex: 1;
       padding: 50px;
@@ -254,7 +236,6 @@
       50% { box-shadow: 0 0 0 5px #0040D1; background: #f8faff; }
     }
 
-    /* 오버레이 */
     .overlay {
       position: absolute;
       top: 0;
@@ -355,35 +336,230 @@
 </head>
 <body>
 
-<div class="player-stage" id="playerStage">
-  <div class="player-scale" id="playerScale">
-    <div class="guide-container" id="guideContainer">
+  <div class="player-stage" id="playerStage">
+    <div class="player-scale" id="playerScale">
+      <div class="guide-container" id="guideContainer">
 
-      <div id="click-hint">클릭</div>
+        <div id="click-hint">클릭</div>
 
-      <div class="play-overlay" id="playOverlay">
-        <button class="btn-start" onclick="runFullProcess()">과정 영상 보기 ▶</button>
+        <div class="play-overlay" id="playOverlay">
+          <button class="btn-start" id="startBtn" type="button">과정 영상 보기 ▶</button>
+        </div>
+
+        <div class="main-shell">
+          <aside class="sidebar">
+            <div class="sidebar-header"></div>
+            <div class="menu-item">
+              <span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></span>알림
+            </div>
+            <div class="menu-item">
+              <span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg></span>대시보드
+            </div>
+
+            <div class="menu-title">메뉴</div>
+            <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg></span>SKU</div>
+            <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline></svg></span>재고</div>
+            <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg></span>입·출고</div>
+            <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg></span>(신)OMS</div>
+            <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg></span>주문</div>
+            <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg></span>송장</div>
+            <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg></span>CS</div>
+            <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></span>트렌드</div>
+
+            <div class="menu-item" id="nav-reg">
+              <i class="menu-arrow">▼</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></span><strong>등록</strong>
+            </div>
+
+            <div class="sub-menu-list">
+              <span class="sub-item">브랜드</span>
+              <span class="sub-item">담당자 연락처</span>
+              <span class="sub-item active-sub" id="nav-member">구성원</span>
+              <span class="sub-item">주소록</span>
+            </div>
+
+            <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></span>기타</div>
+          </aside>
+
+          <main class="content-area">
+            <div class="content-header">
+              <h2 style="font-size: 28px; font-weight: 700;">구성원</h2>
+              <div id="target-add-btn" class="btn-add-main">+ 구성원 추가</div>
+            </div>
+
+            <div style="font-weight:700; margin-bottom:20px; font-size:16px;">구성원 <span style="color:#adb5bd; font-weight:400; margin-left:8px;">1명의 구성원</span></div>
+
+            <div class="member-list">
+              <div class="member-item">
+                <div class="avatar-circle">품고</div>
+                <div style="flex:1;">
+                  <div style="font-weight:700; font-size:16px;">감곡 (기본 계정)</div>
+                  <div style="font-size:14px; color:#868e96;">gamgok@dohands.com</div>
+                </div>
+                <div style="color:#adb5bd; font-size:14px;">자세히 ></div>
+              </div>
+
+              <div id="new-row" class="member-item">
+                <div class="avatar-circle">품고</div>
+                <div style="flex:1;">
+                  <div style="font-weight:700; font-size:16px;">품고 (가이드)</div>
+                  <div style="font-size:14px; color:#868e96;">poomgo@dohands.com</div>
+                </div>
+                <div style="color:#adb5bd; font-size:14px;">자세히 ></div>
+              </div>
+            </div>
+          </main>
+        </div>
+
+        <div class="overlay" id="addOverlay">
+          <div class="overlay-header">
+            <div style="display: flex; align-items: center; gap: 20px;"><span style="font-size: 24px;">←</span><strong>구성원 추가</strong></div>
+            <button id="target-submit" class="btn-submit-pop">구성원 추가</button>
+          </div>
+
+          <div class="pop-profile-icon">품고</div>
+
+          <div class="form-card">
+            <p style="font-weight:700; font-size:18px; margin-bottom:30px;">기본</p>
+            <div class="form-row"><label>이름 *</label><input type="text" id="ani-name" class="form-input" readonly></div>
+            <div class="form-row">
+              <label>이메일 *</label>
+              <input type="text" id="ani-email" class="form-input" readonly>
+              <button id="target-check" class="btn-check-duplicate">중복 확인</button>
+            </div>
+            <div class="form-row"><label>전화번호</label><input type="text" id="ani-phone" class="form-input" readonly></div>
+          </div>
+        </div>
+
       </div>
+    </div>
+  </div>
 
-      <div class="app-shell">
-        <aside class="sidebar">
-          <div class="sidebar-header"></div>
-          <div class="menu-item">
-            <span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></span>알림
-          </div>
-          <div class="menu-item">
-            <span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg></span>대시보드
-          </div>
+  <script>
+    const hint = document.getElementById('click-hint');
+    const overlay = document.getElementById('addOverlay');
+    const playOverlay = document.getElementById('playOverlay');
+    const startBtn = document.getElementById('startBtn');
 
-          <div class="menu-title">메뉴</div>
-          <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg></span>SKU</div>
-          <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline></svg></span>재고</div>
-          <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg></span>입·출고</div>
-          <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg></span>(신)OMS</div>
-          <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg></span>주문</div>
-          <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg></span>송장</div>
-          <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg></span>CS</div>
-          <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></span>트렌드</div>
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
-          <div class="menu-item" id="nav-reg">
-            <i class="menu-arrow">▼</i><span class="menu
+    function fitGuideToFrame() {
+      const stage = document.getElementById('playerStage');
+      const scaleWrap = document.getElementById('playerScale');
+      const guide = document.getElementById('guideContainer');
+
+      if (!stage || !scaleWrap || !guide) return;
+
+      const stageWidth = stage.clientWidth;
+      const stageHeight = stage.clientHeight;
+      const guideWidth = 1200;
+      const guideHeight = 850;
+
+      const scale = Math.min(stageWidth / guideWidth, stageHeight / guideHeight);
+
+      scaleWrap.style.transform = `scale(${scale})`;
+      scaleWrap.style.width = `${guideWidth}px`;
+      scaleWrap.style.height = `${guideHeight}px`;
+    }
+
+    async function showClickAction(targetId, waitTime = 3000) {
+      const target = document.getElementById(targetId);
+      const container = document.getElementById('guideContainer');
+      if (!target || !container) return;
+
+      const rect = target.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+
+      target.classList.add('target-highlight');
+
+      const x = rect.left - containerRect.left + (rect.width / 2);
+      const y = rect.top - containerRect.top;
+
+      hint.style.display = 'block';
+      hint.style.left = (x + 20) + 'px';
+      hint.style.top = (y - 15) + 'px';
+
+      await sleep(waitTime);
+
+      target.classList.remove('target-highlight');
+      hint.style.display = 'none';
+    }
+
+    function resetForm() {
+      document.getElementById('ani-name').value = '';
+      document.getElementById('ani-email').value = '';
+      document.getElementById('ani-phone').value = '';
+
+      const cBtn = document.getElementById('target-check');
+      cBtn.innerText = '중복 확인';
+      cBtn.style.color = '#adb5bd';
+      cBtn.style.background = '#f8f9fa';
+
+      document.getElementById('new-row').classList.remove('active-row');
+      overlay.classList.remove('active');
+    }
+
+    function typeEffect(id, text) {
+      return new Promise(resolve => {
+        const el = document.getElementById(id);
+        el.value = '';
+        el.classList.add('typing');
+
+        let i = 0;
+        const timer = setInterval(() => {
+          el.value += text[i];
+          i += 1;
+
+          if (i === text.length) {
+            clearInterval(timer);
+            el.classList.remove('typing');
+            resolve();
+          }
+        }, 60);
+      });
+    }
+
+    async function runFullProcess() {
+      playOverlay.classList.add('hidden');
+      resetForm();
+
+      await showClickAction('nav-reg', 1500);
+      await showClickAction('nav-member', 1500);
+      await showClickAction('target-add-btn', 3000);
+
+      overlay.classList.add('active');
+      await sleep(1500);
+
+      await typeEffect('ani-name', '품고');
+      await sleep(500);
+      await typeEffect('ani-email', 'poomgo@dohands.com');
+
+      const cBtn = document.getElementById('target-check');
+      cBtn.style.color = '#333';
+      cBtn.style.background = '#fff';
+
+      await showClickAction('target-check', 3000);
+
+      cBtn.innerText = '확인됨';
+      cBtn.style.color = '#adb5bd';
+      cBtn.style.background = '#eee';
+
+      await sleep(500);
+      await typeEffect('ani-phone', '010-1234-1234');
+      await showClickAction('target-submit', 3000);
+
+      overlay.classList.remove('active');
+      await sleep(1000);
+      document.getElementById('new-row').classList.add('active-row');
+
+      await sleep(5000);
+      playOverlay.classList.remove('hidden');
+    }
+
+    startBtn.addEventListener('click', runFullProcess);
+    window.addEventListener('load', fitGuideToFrame);
+    window.addEventListener('resize', fitGuideToFrame);
+  </script>
+</body>
+</html>
