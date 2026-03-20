@@ -1,299 +1,389 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>구성원 등록 과정 영상</title>
-    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-    <style>
-        /* --- 기본 설정 (프리텐다드 적용) --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
-html, body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    overflow: hidden;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>구성원 등록 과정 영상</title>
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Pretendard', sans-serif;
+    }
 
-body {
-    background-color: #f1f3f5;
-}
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #f1f3f5;
+    }
 
-        .guide-container {
-            width: 1200px; height: 850px; background: #fff; border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15); position: relative; overflow: hidden; border: 1px solid #e9ecef;
-        }
+    body {
+      display: block;
+    }
 
-        /* --- 💡 클릭 안내 문구 및 타겟 강조 테두리 --- */
-        #click-hint {
-            position: absolute; background: #0040D1; color: #fff; font-size: 13px; font-weight: 700;
-            padding: 5px 12px; border-radius: 4px; z-index: 10000; pointer-events: none; display: none;
-            box-shadow: 0 4px 10px rgba(0,64,209,0.3); animation: hintBounce 1s infinite;
-        }
-        @keyframes hintBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+    .player-stage {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #f1f3f5;
+      position: relative;
+    }
 
-        /* 클릭 시 타겟 강조 선 */
-        .target-highlight { 
-            outline: 3px solid #0040D1 !important; 
-            outline-offset: 2px; 
-            transition: outline 0.2s; 
-            border-radius: 4px;
-        }
+    .player-scale {
+      transform-origin: center center;
+      will-change: transform;
+      display: inline-block;
+    }
 
-        /* 시작 레이어 */
-        .play-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.9); z-index: 2000;
-            display: flex; justify-content: center; align-items: center;
-        }
-        .play-overlay.hidden { display: none; }
-        .btn-start { background: #0040D1; color: #fff; border: none; padding: 20px 45px; border-radius: 50px; font-size: 18px; font-weight: 700; cursor: pointer; }
+    .guide-container {
+      width: 1200px;
+      height: 850px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #e9ecef;
+    }
 
-        /* --- 💡 [전체 복원] 사이드바 디자인 (모든 SVG 아이콘 포함) --- */
-        .sidebar { width: 280px; background: #fff; border-right: 1px solid #e9ecef; display: flex; flex-direction: column; flex-shrink: 0; overflow-y: auto; }
-        .sidebar-header { height: 40px; }
-        .menu-title { font-size: 13px; color: #adb5bd; padding: 25px 24px 10px; font-weight: 700; }
-        
-        .menu-item { display: flex; align-items: center; padding: 12px 24px; color: #495057; font-size: 15px; width: 100%; cursor: default; }
-        .menu-icon { margin-right: 12px; width: 18px; display: flex; justify-content: center; align-items: center; }
-        .menu-arrow { font-size: 10px; color: #adb5bd; margin-right: 8px; font-style: normal; width: 10px; text-align: center; }
+    /* 클릭 안내 */
+    #click-hint {
+      position: absolute;
+      background: #0040D1;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 4px;
+      z-index: 10000;
+      pointer-events: none;
+      display: none;
+      box-shadow: 0 4px 10px rgba(0,64,209,0.3);
+      animation: hintBounce 1s infinite;
+    }
 
-        /* 하위 메뉴 리스트 정렬 */
-        .sub-menu-list { width: 100%; }
-        .sub-item { padding: 10px 24px 10px 62px; font-size: 14px; color: #495057; display: block; width: 100%; cursor: default; }
-        .sub-item.active-sub { color: #0040D1; font-weight: 700; background: #f0f4ff; border-radius: 0 24px 24px 0; width: calc(100% - 15px); }
+    @keyframes hintBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
 
-        /* --- 메인 콘텐츠 --- */
-        .content-area { flex: 1; padding: 50px; background: #fff; overflow-y: auto; display: flex; flex-direction: column; }
-        .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; width: 100%; }
-        
-        /* 💡 구성원 추가 버튼 오른쪽 정렬 */
-        .btn-add-main { 
-            background: #f8faff; border: 1px solid #e9ecef; color: #0040D1; 
-            padding: 12px 24px; border-radius: 6px; font-weight: 700; cursor: default;
-        }
+    .target-highlight {
+      outline: 3px solid #0040D1 !important;
+      outline-offset: 2px;
+      transition: outline 0.2s;
+      border-radius: 4px;
+    }
 
-        .member-list { border-top: 1px solid #eee; width: 100%; }
-        .member-item { display: flex; align-items: center; padding: 20px 0; border-bottom: 1px solid #f1f3f5; }
-        .avatar-circle { width: 48px; height: 48px; background: #e9ecef; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #868e96; margin-right: 18px; font-size: 14px; }
+    /* 시작 레이어 */
+    .play-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.9);
+      z-index: 2000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-        /* 💡 신규 등록 하이라이트 테두리 */
-        #new-row { display: none; opacity: 0; border-radius: 8px; }
-        #new-row.active-row { display: flex; opacity: 1; animation: successFlash 2.5s ease-out; }
-        @keyframes successFlash { 
-            0%, 100% { box-shadow: 0 0 0 0px transparent; } 
-            50% { box-shadow: 0 0 0 5px #0040D1; background: #f8faff; } 
-        }
+    .play-overlay.hidden {
+      display: none;
+    }
 
-        /* 팝업 오버레이 */
-        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #fff; transform: translateY(100%); transition: transform 0.6s ease; z-index: 1000; }
-        .overlay.active { transform: translateY(0); }
-        .overlay-header { display: flex; align-items: center; padding: 20px 30px; border-bottom: 1px solid #f1f3f5; justify-content: space-between; }
-        
-        /* 💡 2번째 이미지 원형 프로필 아이콘 */
-        .pop-profile-icon {
-            width: 120px; height: 120px; background: #e9ecef; border-radius: 50%;
-            margin: 40px auto 30px; display: flex; align-items: center; justify-content: center;
-            font-size: 28px; color: #868e96; font-weight: 700;
-        }
+    .btn-start {
+      background: #0040D1;
+      color: #fff;
+      border: none;
+      padding: 20px 45px;
+      border-radius: 50px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+    }
 
-        .form-card { width: 100%; max-width: 700px; margin: 0 auto; border: 1px solid #e9ecef; border-radius: 12px; padding: 40px; background: #fff; }
-        .form-row { display: flex; align-items: center; margin-bottom: 25px; }
-        .form-row label { width: 120px; font-size: 15px; font-weight: 700; color: #333; }
-        .form-input { flex: 1; padding: 12px 15px; border: 1px solid #ced4da; border-radius: 6px; font-size: 14px; outline: none; }
-        .form-input.typing { border-color: #0040D1; background: #f8faff; }
-        .btn-check-duplicate { margin-left: 10px; padding: 0 20px; height: 48px; background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 6px; color: #adb5bd; font-size: 14px; font-weight: 700; }
-        .btn-submit-pop { background: #0040D1; color: #fff; border: none; padding: 12px 25px; border-radius: 6px; font-weight: 700; cursor: default; }
+    /* 좌우 레이아웃 */
+    .app-shell {
+      display: flex;
+      height: 100%;
+      width: 100%;
+    }
 
-        .player-stage {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    background: #f1f3f5;
-}
+    /* 사이드바 */
+    .sidebar {
+      width: 280px;
+      background: #fff;
+      border-right: 1px solid #e9ecef;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      overflow-y: auto;
+    }
 
-.player-scale {
-    transform-origin: center center;
-    will-change: transform;
-}
-    </style>
+    .sidebar-header {
+      height: 40px;
+    }
+
+    .menu-title {
+      font-size: 13px;
+      color: #adb5bd;
+      padding: 25px 24px 10px;
+      font-weight: 700;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 24px;
+      color: #495057;
+      font-size: 15px;
+      width: 100%;
+      cursor: default;
+    }
+
+    .menu-icon {
+      margin-right: 12px;
+      width: 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .menu-arrow {
+      font-size: 10px;
+      color: #adb5bd;
+      margin-right: 8px;
+      font-style: normal;
+      width: 10px;
+      text-align: center;
+    }
+
+    .sub-menu-list {
+      width: 100%;
+    }
+
+    .sub-item {
+      padding: 10px 24px 10px 62px;
+      font-size: 14px;
+      color: #495057;
+      display: block;
+      width: 100%;
+      cursor: default;
+    }
+
+    .sub-item.active-sub {
+      color: #0040D1;
+      font-weight: 700;
+      background: #f0f4ff;
+      border-radius: 0 24px 24px 0;
+      width: calc(100% - 15px);
+    }
+
+    /* 메인 */
+    .content-area {
+      flex: 1;
+      padding: 50px;
+      background: #fff;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .content-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      width: 100%;
+    }
+
+    .btn-add-main {
+      background: #f8faff;
+      border: 1px solid #e9ecef;
+      color: #0040D1;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-weight: 700;
+      cursor: default;
+    }
+
+    .member-list {
+      border-top: 1px solid #eee;
+      width: 100%;
+    }
+
+    .member-item {
+      display: flex;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 1px solid #f1f3f5;
+    }
+
+    .avatar-circle {
+      width: 48px;
+      height: 48px;
+      background: #e9ecef;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #868e96;
+      margin-right: 18px;
+      font-size: 14px;
+    }
+
+    #new-row {
+      display: none;
+      opacity: 0;
+      border-radius: 8px;
+    }
+
+    #new-row.active-row {
+      display: flex;
+      opacity: 1;
+      animation: successFlash 2.5s ease-out;
+    }
+
+    @keyframes successFlash {
+      0%, 100% { box-shadow: 0 0 0 0px transparent; }
+      50% { box-shadow: 0 0 0 5px #0040D1; background: #f8faff; }
+    }
+
+    /* 오버레이 */
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      transform: translateY(100%);
+      transition: transform 0.6s ease;
+      z-index: 1000;
+    }
+
+    .overlay.active {
+      transform: translateY(0);
+    }
+
+    .overlay-header {
+      display: flex;
+      align-items: center;
+      padding: 20px 30px;
+      border-bottom: 1px solid #f1f3f5;
+      justify-content: space-between;
+    }
+
+    .pop-profile-icon {
+      width: 120px;
+      height: 120px;
+      background: #e9ecef;
+      border-radius: 50%;
+      margin: 40px auto 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: #868e96;
+      font-weight: 700;
+    }
+
+    .form-card {
+      width: 100%;
+      max-width: 700px;
+      margin: 0 auto;
+      border: 1px solid #e9ecef;
+      border-radius: 12px;
+      padding: 40px;
+      background: #fff;
+    }
+
+    .form-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .form-row label {
+      width: 120px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #333;
+    }
+
+    .form-input {
+      flex: 1;
+      padding: 12px 15px;
+      border: 1px solid #ced4da;
+      border-radius: 6px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .form-input.typing {
+      border-color: #0040D1;
+      background: #f8faff;
+    }
+
+    .btn-check-duplicate {
+      margin-left: 10px;
+      padding: 0 20px;
+      height: 48px;
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 6px;
+      color: #adb5bd;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .btn-submit-pop {
+      background: #0040D1;
+      color: #fff;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 6px;
+      font-weight: 700;
+      cursor: default;
+    }
+  </style>
 </head>
 <body>
 
 <div class="player-stage" id="playerStage">
-    <div class="player-scale" id="playerScale">
-        <div class="guide-container" id="guideContainer">
-    <div id="click-hint">클릭</div>
+  <div class="player-scale" id="playerScale">
+    <div class="guide-container" id="guideContainer">
 
-    <div class="play-overlay" id="playOverlay">
+      <div id="click-hint">클릭</div>
+
+      <div class="play-overlay" id="playOverlay">
         <button class="btn-start" onclick="runFullProcess()">과정 영상 보기 ▶</button>
-        </div>
-    </div>
-</div>
-    <div style="display:flex; height:100%;">
+      </div>
+
+      <div class="app-shell">
         <aside class="sidebar">
-            <div class="sidebar-header"></div>
-            <div class="menu-item">
-                <span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></span>알림
-            </div>
-            <div class="menu-item">
-                <span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg></span>대시보드
-            </div>
-            
-            <div class="menu-title">메뉴</div>
-            <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg></span>SKU</div>
-            <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline></svg></span>재고</div>
-            <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg></span>입·출고</div>
-            <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg></span>(신)OMS</div>
-            <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg></span>주문</div>
-            <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg></span>송장</div>
-            <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg></span>CS</div>
-            <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></span>트렌드</div>
-            
-            <div class="menu-item" id="nav-reg">
-                <i class="menu-arrow">▼</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></span><strong>등록</strong>
-            </div>
-            <div class="sub-menu-list">
-                <span class="sub-item">브랜드</span>
-                <span class="sub-item">담당자 연락처</span>
-                <span class="sub-item active-sub" id="nav-member">구성원</span>
-                <span class="sub-item">주소록</span>
-            </div>
-            <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></span>기타</div>
-        </aside>
+          <div class="sidebar-header"></div>
+          <div class="menu-item">
+            <span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></span>알림
+          </div>
+          <div class="menu-item">
+            <span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg></span>대시보드
+          </div>
 
-        <main class="content-area">
-            <div class="content-header">
-                <h2 style="font-size: 28px; font-weight: 700;">구성원</h2>
-                <div id="target-add-btn" class="btn-add-main">+ 구성원 추가</div>
-            </div>
-            
-            <div style="font-weight:700; margin-bottom:20px; font-size:16px;">구성원 <span style="color:#adb5bd; font-weight:400; margin-left:8px;">1명의 구성원</span></div>
-            
-            <div class="member-list">
-                <div class="member-item">
-                    <div class="avatar-circle">품고</div>
-                    <div style="flex:1;">
-                        <div style="font-weight:700; font-size:16px;">감곡 (기본 계정)</div>
-                        <div style="font-size:14px; color:#868e96;">gamgok@dohands.com</div>
-                    </div>
-                    <div style="color:#adb5bd; font-size:14px;">자세히 ></div>
-                </div>
+          <div class="menu-title">메뉴</div>
+          <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg></span>SKU</div>
+          <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline></svg></span>재고</div>
+          <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg></span>입·출고</div>
+          <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg></span>(신)OMS</div>
+          <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg></span>주문</div>
+          <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg></span>송장</div>
+          <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg></span>CS</div>
+          <div class="menu-item"><i class="menu-arrow">▶</i><span class="menu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></span>트렌드</div>
 
-                <div id="new-row" class="member-item">
-                    <div class="avatar-circle">품고</div>
-                    <div style="flex:1;">
-                        <div style="font-weight:700; font-size:16px;">품고 (가이드)</div>
-                        <div style="font-size:14px; color:#868e96;">poomgo@dohands.com</div>
-                    </div>
-                    <div style="color:#adb5bd; font-size:14px;">자세히 ></div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <div class="overlay" id="addOverlay">
-        <div class="overlay-header">
-            <div style="display: flex; align-items: center; gap: 20px;"><span style="font-size: 24px;">←</span><strong>구성원 추가</strong></div>
-            <button id="target-submit" class="btn-submit-pop">구성원 추가</button>
-        </div>
-        
-        <div class="pop-profile-icon">품고</div>
-
-        <div class="form-card">
-            <p style="font-weight:700; font-size:18px; margin-bottom:30px;">기본</p>
-            <div class="form-row"><label>이름 *</label><input type="text" id="ani-name" class="form-input" readonly></div>
-            <div class="form-row">
-                <label>이메일 *</label>
-                <input type="text" id="ani-email" class="form-input" readonly>
-                <button id="target-check" class="btn-check-duplicate">중복 확인</button>
-            </div>
-            <div class="form-row"><label>전화번호</label><input type="text" id="ani-phone" class="form-input" readonly></div>
-        </div>
-    </div>
-</div>
-
-<script>
-    const hint = document.getElementById('click-hint');
-    const overlay = document.getElementById('addOverlay');
-    const playOverlay = document.getElementById('playOverlay');
-
-    async function showClickAction(targetId, waitTime = 3000) {
-        const target = document.getElementById(targetId);
-        const rect = target.getBoundingClientRect();
-        const container = document.querySelector('.guide-container').getBoundingClientRect();
-        
-        target.classList.add('target-highlight');
-        
-        const x = rect.left - container.left + (rect.width / 2);
-        const y = rect.top - container.top;
-        
-        hint.style.display = 'block';
-        hint.style.left = (x + 20) + 'px';
-        hint.style.top = (y - 15) + 'px';
-        
-        await sleep(waitTime);
-        target.classList.remove('target-highlight');
-        hint.style.display = 'none';
-    }
-
-    async function runFullProcess() {
-        playOverlay.classList.add('hidden');
-        overlay.classList.remove('active');
-        document.getElementById('new-row').classList.remove('active-row');
-        
-        // 1. 등록 클릭 강조
-        await showClickAction('nav-reg', 1500);
-        // 2. 구성원 클릭 강조
-        await showClickAction('nav-member', 1500);
-        // 3. 구성원 추가 버튼 클릭 강조
-        await showClickAction('target-add-btn', 3000);
-        
-        overlay.classList.add('active');
-        await sleep(1500);
-
-        // 4. 타이핑
-        await typeEffect('ani-name', '품고');
-        await sleep(500);
-        await typeEffect('ani-email', 'poomgo@dohands.com');
-        
-        // 5. 중복확인 클릭 강조
-        const cBtn = document.getElementById('target-check');
-        cBtn.style.color = "#333"; cBtn.style.background = "#fff";
-        await showClickAction('target-check', 3000);
-        cBtn.innerText = "확인됨"; cBtn.style.color = "#adb5bd"; cBtn.style.background = "#eee";
-
-        // 6. 나머지 타이핑 및 제출
-        await sleep(500);
-        await typeEffect('ani-phone', '010-1234-1234');
-        await showClickAction('target-submit', 3000);
-
-        // 7. 결과 및 행 강조
-        overlay.classList.remove('active');
-        await sleep(1000);
-        document.getElementById('new-row').classList.add('active-row');
-
-        await sleep(5000);
-        playOverlay.classList.remove('hidden');
-    }
-
-    function typeEffect(id, text) {
-        return new Promise(resolve => {
-            const el = document.getElementById(id);
-            el.classList.add('typing');
-            let i = 0;
-            let t = setInterval(() => {
-                el.value += text[i]; i++;
-                if(i === text.length) { clearInterval(t); el.classList.remove('typing'); resolve(); }
-            }, 60);
-        });
-    }
-
-    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
-</script>
-
-</body>
-</html>
+          <div class="menu-item" id="nav-reg">
+            <i class="menu-arrow">▼</i><span class="menu
