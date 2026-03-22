@@ -43,38 +43,35 @@
     <div id="click-hint-badge">클릭</div>
     <div class="play-overlay-full" id="finalOverlay"><button class="btn-start-action" onclick="runCompleteManual()">과정 영상 보기 ▶</button></div>
 
-    <div id="view-modal" class="step-view-wrap">
-    <div style="display: flex; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; padding: 24px;">
-        <div style="width: min(520px, 100%); max-height: calc(100vh - 48px); background-color: #ffffff; border-radius: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow: hidden;">
-            
-            <div style="padding: 20px 24px; border-bottom: 1px solid #dee2e6; flex-shrink: 0;">
-                <h2 style="font-size: 16px; font-weight: bold; color: #333;">판매처 계정 개별 등록</h2>
+<div id="view-modal" class="step-view-wrap" style="position:absolute; inset:0; z-index:30; display:flex; justify-content:center; align-items:center; background:rgba(0,0,0,0.5); padding:24px;">
+    <div style="width:520px; max-width:100%; max-height:calc(100vh - 48px); background-color:#ffffff; border-radius:6px; box-shadow:0 10px 30px rgba(0,0,0,0.2); display:flex; flex-direction:column; overflow:hidden;">
+        
+        <div style="padding:20px 24px; border-bottom:1px solid #dee2e6; flex-shrink:0;">
+            <h2 style="font-size:16px; font-weight:bold; color:#333;">판매처 계정 개별 등록</h2>
+        </div>
+
+        <div style="padding:24px; display:flex; flex-direction:column; gap:20px; overflow-y:auto; flex:1; min-height:0;">
+            <div style="display:flex; flex-direction:column; gap:8px;">
+                <label style="font-size:13px; font-weight:bold;">판매처명*</label>
+                <input type="text" id="type-market" style="padding:10px 12px; border:1px solid #748ffc; background:#f8fbff; border-radius:4px; font-size:14px;" readonly>
             </div>
 
-            <div style="padding: 24px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; flex: 1; min-height: 0;">
-                <div style="display: flex; flex-direction: column; gap: 8px;">
-                    <label style="font-size: 13px; font-weight: bold;">판매처명*</label>
-                    <input type="text" id="type-market" style="padding: 10px 12px; border: 1px solid #748ffc; background: #f8fbff; border-radius: 4px; font-size: 14px;" readonly>
-                </div>
-
-                <div style="display: flex; flex-direction: column; gap: 8px;">
-                    <label style="font-size: 13px; font-weight: bold;">브랜드명*</label>
-                    <select id="select-brand" style="padding: 10px 12px; border: 1px solid #748ffc; background: #f8fbff; border-radius: 4px; font-size: 14px;">
-                        <option value="">선택</option>
-                        <option value="품고">품고</option>
-                    </select>
-                </div>
-
-                <div style="display: flex; flex-direction: column; gap: 8px;">
-                    <label style="font-size: 13px; font-weight: bold;">연동 계정*</label>
-                    <input type="text" id="type-id" style="padding: 10px 12px; border: 1px solid #748ffc; background: #f8fbff; border-radius: 4px; font-size: 14px;" readonly>
-                </div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+                <label style="font-size:13px; font-weight:bold;">브랜드명*</label>
+                <select id="select-brand" style="padding:10px 12px; border:1px solid #748ffc; background:#f8fbff; border-radius:4px; font-size:14px;">
+                    <option value="">선택</option>
+                    <option value="품고">품고</option>
+                </select>
             </div>
 
-            <div style="padding: 16px 24px; border-top: 1px solid #dee2e6; display: flex; justify-content: flex-end; background: #f8f9fa; flex-shrink: 0;">
-                <button id="trigger-final-btn" style="padding: 10px 24px; border: none; background-color: #0040D1 !important; color: #FFFFFF !important; border-radius: 4px; font-size: 14px; font-weight: bold; cursor: pointer;">등록</button>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+                <label style="font-size:13px; font-weight:bold;">연동 계정*</label>
+                <input type="text" id="type-id" style="padding:10px 12px; border:1px solid #748ffc; background:#f8fbff; border-radius:4px; font-size:14px;" readonly>
             </div>
+        </div>
 
+        <div style="padding:16px 24px; border-top:1px solid #dee2e6; display:flex; justify-content:flex-end; background:#f8f9fa; flex-shrink:0;">
+            <button id="trigger-final-btn" style="padding:10px 24px; border:none; background-color:#0040D1 !important; color:#FFFFFF !important; border-radius:4px; font-size:14px; font-weight:bold; cursor:pointer;">등록</button>
         </div>
     </div>
 </div>
