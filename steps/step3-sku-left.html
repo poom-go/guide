@@ -201,15 +201,11 @@
 }
 
 /* modal */
-/* modal */
 .sku-modal {
   display: none;
   position: fixed;
   inset: 0;
   z-index: 9999;
-
-  /* ⭐ 추가 */
-  display: flex;
   align-items: center;
   justify-content: center;
 }
@@ -229,17 +225,11 @@
   z-index: 2;
   max-width: 760px;
   width: calc(100% - 40px);
+  margin: 0;
   background: #fff;
   padding: 28px;
   border-radius: 22px;
   box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
-
-  /* ❌ 기존 margin 제거 */
-  margin: 0;
-
-  /* ⭐ 추가 (높이 넘칠 때 대비) */
-  max-height: 90vh;
-  overflow-y: auto;
 }
 
 .sku-modal-content h3 {
