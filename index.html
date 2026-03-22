@@ -1420,6 +1420,14 @@ helpBtn.onclick = () => {
   helpBox.classList.toggle("open");
 };
 
+  document.addEventListener("click", (event) => {
+  const clickedInsideHelp = helpBox.contains(event.target);
+  const clickedHelpButton = helpBtn.contains(event.target);
+
+  if (!clickedInsideHelp && !clickedHelpButton) {
+    helpBox.classList.remove("open");
+  }
+});
 prevBtn.onclick = () => {
   if (step === 0 && item === 0) return;
 
