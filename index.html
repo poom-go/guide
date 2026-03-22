@@ -45,7 +45,8 @@ html, body {
   overflow: hidden;
 }
 
-body.video-modal-open {
+body.video-modal-open,
+body.notice-modal-open {
   overflow: hidden;
 }
 
@@ -604,99 +605,6 @@ body.video-modal-open {
   fill: #fff;
 }
 
-  /* ===== NOTICE MODAL ===== */
-.notice-modal {
-  position: fixed;
-  inset: 0;
-  display: none;
-  z-index: 2100;
-}
-
-.notice-modal.open {
-  display: block;
-}
-
-.notice-modal-dim {
-  position: absolute;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.62);
-}
-
-.notice-modal-dialog {
-  position: relative;
-  z-index: 2;
-  width: min(560px, calc(100vw - 32px));
-  margin: 80px auto;
-  background: #ffffff;
-  border-radius: 24px;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
-  overflow: hidden;
-}
-
-.notice-modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 20px 22px;
-  border-bottom: 1px solid #edf2fa;
-}
-
-.notice-modal-title {
-  font-size: 20px;
-  font-weight: 900;
-  color: #111827;
-}
-
-.notice-modal-close {
-  width: 40px;
-  height: 40px;
-  border: none;
-  border-radius: 999px;
-  background: #f3f6fb;
-  color: #b91c1c;
-  font-size: 24px;
-  line-height: 1;
-  cursor: pointer;
-}
-
-.notice-modal-body {
-  padding: 22px;
-  max-height: min(60vh, 520px);
-  overflow: auto;
-}
-
-.notice-modal-body p,
-.notice-modal-body li {
-  font-size: 14px;
-  line-height: 1.8;
-  color: #4b5563;
-}
-
-.notice-modal-body ul,
-.notice-modal-body ol {
-  margin: 0;
-  padding-left: 18px;
-}
-
-.notice-modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  padding: 18px 22px 22px;
-  border-top: 1px solid #edf2fa;
-  background: #fff;
-}
-
-.btn-notice-confirm {
-  background: #b91c1c;
-  color: #fff;
-}
-
-.btn-notice-confirm:hover {
-  filter: brightness(0.98);
-}
-
 /* ===== FOOT ===== */
 .content-footer {
   max-width: 920px;
@@ -935,6 +843,99 @@ body.video-modal-open {
   background: #f8fafc;
 }
 
+/* ===== NOTICE MODAL ===== */
+.notice-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  z-index: 2100;
+}
+
+.notice-modal.open {
+  display: block;
+}
+
+.notice-modal-dim {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.62);
+}
+
+.notice-modal-dialog {
+  position: relative;
+  z-index: 2;
+  width: min(560px, calc(100vw - 32px));
+  margin: 80px auto;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
+  overflow: hidden;
+}
+
+.notice-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 22px;
+  border-bottom: 1px solid #edf2fa;
+}
+
+.notice-modal-title {
+  font-size: 20px;
+  font-weight: 900;
+  color: #111827;
+}
+
+.notice-modal-close {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 999px;
+  background: #f3f6fb;
+  color: #b91c1c;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.notice-modal-body {
+  padding: 22px;
+  max-height: min(60vh, 520px);
+  overflow: auto;
+}
+
+.notice-modal-body p,
+.notice-modal-body li {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #4b5563;
+}
+
+.notice-modal-body ul,
+.notice-modal-body ol {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.notice-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 18px 22px 22px;
+  border-top: 1px solid #edf2fa;
+  background: #fff;
+}
+
+.btn-notice-confirm {
+  background: #b91c1c;
+  color: #fff;
+}
+
+.btn-notice-confirm:hover {
+  filter: brightness(0.98);
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1200px) {
   .sidebar {
@@ -1044,6 +1045,12 @@ body.video-modal-open {
     height: calc(100vh - 20px);
     margin: 10px auto;
     border-radius: 16px;
+  }
+
+  .notice-modal-dialog {
+    width: calc(100vw - 20px);
+    margin: 24px auto;
+    border-radius: 18px;
   }
 }
 </style>
@@ -1165,6 +1172,23 @@ body.video-modal-open {
   </div>
 </div>
 
+<div class="notice-modal" id="noticeModal">
+  <div class="notice-modal-dim" id="noticeModalDim"></div>
+
+  <div class="notice-modal-dialog">
+    <div class="notice-modal-header">
+      <div class="notice-modal-title" id="noticeModalTitle">유의사항</div>
+      <button type="button" class="notice-modal-close" id="noticeModalClose">×</button>
+    </div>
+
+    <div class="notice-modal-body" id="noticeModalBody"></div>
+
+    <div class="notice-modal-footer">
+      <button type="button" class="btn btn-notice-confirm" id="noticeConfirmBtn">확인했어요</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const STEPS = [
   {
@@ -1191,23 +1215,23 @@ const STEPS = [
   {
     title: "STEP2. 풀필먼트 연동",
     items: [
-{
-  title: "판매처 계정 등록",
-  required: true,
-  left: "./steps/step2-new-left.html",
-  right: "./steps/step2-new-right-player.html",
-  help: "./help/step2-new-help.html",
-  desc: "N배송 시작을 위해 가장 선행되어야 하는 작업이에요.",
-  noticeRequired: true,
-  noticeTitle: "판매처 계정 등록 유의사항",
-  noticeHtml: `
-    <ul style="margin:0; padding-left:18px;">
-      <li style="margin-bottom:8px;">API 연동용 판매자 ID를 붙여넣는 과정에서 공백이나 다른 문자가 포함되지 않도록 유의해주세요.</li>
-      <li style="margin-bottom:8px;">잘못된 계정 정보 입력 시 주문 수집 및 출고 연동이 정상적으로 진행되지 않을 수 있습니다.</li>
-      <li>판매처 계정 등록 완료 후 반드시 저장 여부를 확인해주세요.</li>
-    </ul>
-  `
-}
+      {
+        title: "판매처 계정 등록",
+        required: true,
+        left: "./steps/step2-new-left.html",
+        right: "./steps/step2-new-right-player.html",
+        help: "./help/step2-new-help.html",
+        desc: "N배송 시작을 위해 가장 선행되어야 하는 작업이에요.",
+        noticeRequired: true,
+        noticeTitle: "판매처 계정 등록 유의사항",
+        noticeHtml: `
+          <ul style="margin:0; padding-left:18px;">
+            <li style="margin-bottom:8px;">API 연동용 판매자 ID를 붙여넣는 과정에서 공백이나 다른 문자가 포함되지 않도록 유의해주세요.</li>
+            <li style="margin-bottom:8px;">잘못된 계정 정보 입력 시 주문 수집 및 출고 연동이 정상적으로 진행되지 않을 수 있습니다.</li>
+            <li>판매처 계정 등록 완료 후 반드시 저장 여부를 확인해주세요.</li>
+          </ul>
+        `
+      },
       {
         title: "풀필먼트 연동",
         required: true,
@@ -1286,6 +1310,7 @@ const STEPS = [
 let step = 0;
 let item = 0;
 const done = {};
+const noticeConfirmed = {};
 
 const sidebar = document.getElementById("sidebar");
 const left = document.getElementById("left");
@@ -1311,6 +1336,13 @@ const videoModalDim = document.getElementById("videoModalDim");
 const videoModalClose = document.getElementById("videoModalClose");
 const videoModalTitle = document.getElementById("videoModalTitle");
 const videoModalFrame = document.getElementById("videoModalFrame");
+
+const noticeModal = document.getElementById("noticeModal");
+const noticeModalDim = document.getElementById("noticeModalDim");
+const noticeModalClose = document.getElementById("noticeModalClose");
+const noticeModalTitle = document.getElementById("noticeModalTitle");
+const noticeModalBody = document.getElementById("noticeModalBody");
+const noticeConfirmBtn = document.getElementById("noticeConfirmBtn");
 
 function getRequiredItems() {
   return STEPS.flatMap((s, si) =>
@@ -1347,6 +1379,10 @@ function getTotalFlatCount() {
   return STEPS.reduce((acc, s) => acc + s.items.length, 0);
 }
 
+function getCurrentNoticeKey() {
+  return `${step}-${item}`;
+}
+
 function renderSidebar() {
   sidebar.innerHTML = "";
 
@@ -1359,7 +1395,7 @@ function renderSidebar() {
       <div class="step-card-header">
         <div class="step-card-main">
           <div class="step-chip">STEP ${si + 1}</div>
-          <div class="step-card-title">${s.title.replace(/^STEP\d+\.\s*/i, "")}</div>
+          <div class="step-card-title">${s.title.replace(/^STEP\\d+\\.\\s*/i, "")}</div>
         </div>
         <span class="badge ${status}">
           ${status === "done" ? "완료" : status === "ing" ? "진행중" : "대기중"}
@@ -1398,9 +1434,7 @@ function bindFAQ() {
       const currentItem = q.parentElement;
 
       document.querySelectorAll(".faq-item").forEach(item => {
-        if (item !== currentItem) {
-          item.classList.remove("open");
-        }
+        if (item !== currentItem) item.classList.remove("open");
       });
 
       currentItem.classList.toggle("open");
@@ -1424,6 +1458,18 @@ function closeVideoModal() {
   videoModal.classList.remove("open");
   videoModalFrame.src = "";
   document.body.classList.remove("video-modal-open");
+}
+
+function openNoticeModal(titleText, html) {
+  noticeModalTitle.textContent = titleText || "유의사항";
+  noticeModalBody.innerHTML = html || "<p>유의사항 내용이 없습니다.</p>";
+  noticeModal.classList.add("open");
+  document.body.classList.add("notice-modal-open");
+}
+
+function closeNoticeModal() {
+  noticeModal.classList.remove("open");
+  document.body.classList.remove("notice-modal-open");
 }
 
 function renderProgress() {
@@ -1454,15 +1500,40 @@ function renderFooterState() {
     nextBtn.textContent = "다음 단계";
     nextBtn.classList.add("btn-next");
     nextBtn.classList.remove("btn-complete");
-    footerNote.textContent = "현재 단계 확인 후 다음 단계로 이동해주세요.";
+
+    const current = STEPS[step].items[item];
+    if (current.noticeRequired && !noticeConfirmed[getCurrentNoticeKey()]) {
+      footerNote.textContent = "유의사항 확인 후 다음 단계로 이동할 수 있어요.";
+    } else {
+      footerNote.textContent = "현재 단계 확인 후 다음 단계로 이동해주세요.";
+    }
   }
 }
 
 function fitInjectedSections() {
   const sections = left.querySelectorAll(".step-left-content > section");
   const sectionCount = sections.length;
+  const current = STEPS[step].items[item];
 
   if (!sectionCount) return;
+
+  if (current.title === "판매처 계정 등록") {
+    sections.forEach(section => {
+      section.style.padding = "14px 16px";
+    });
+
+    left.querySelectorAll("p, li").forEach(el => {
+      el.style.fontSize = "14px";
+      el.style.lineHeight = "1.6";
+    });
+
+    left.querySelectorAll("h4").forEach(el => {
+      el.style.fontSize = "17px";
+      el.style.marginBottom = "8px";
+    });
+
+    return;
+  }
 
   if (sectionCount >= 3) {
     sections.forEach(section => {
@@ -1481,9 +1552,9 @@ function fitInjectedSections() {
 
 async function render() {
   closeVideoModal();
+  closeNoticeModal();
   renderSidebar();
   renderProgress();
-  renderFooterState();
 
   const currentStep = STEPS[step];
   const data = currentStep.items[item];
@@ -1502,6 +1573,13 @@ async function render() {
     left.innerHTML = `<div style="color:#ef4444;font-size:14px;">${e.message}</div>`;
   }
 
+  const inlineNoticeBtn = document.getElementById("openNoticeBtnInline");
+  if (inlineNoticeBtn && data.noticeRequired) {
+    inlineNoticeBtn.onclick = () => {
+      openNoticeModal(data.noticeTitle, data.noticeHtml);
+    };
+  }
+
   openVideoCard.onclick = () => openVideoModal(data.title, data.right);
   openVideoCard.onkeydown = (event) => {
     if (event.key === "Enter" || event.key === " ") {
@@ -1516,20 +1594,15 @@ async function render() {
   } catch (e) {
     helpBox.innerHTML = `<div style="color:#ef4444;font-size:14px;">${e.message}</div>`;
   }
+
+  renderFooterState();
 }
 
-helpBtn.onclick = () => {
+helpBtn.onclick = (event) => {
+  event.stopPropagation();
   helpBox.classList.toggle("open");
 };
 
-  document.addEventListener("click", (event) => {
-  const clickedInsideHelp = helpBox.contains(event.target);
-  const clickedHelpButton = helpBtn.contains(event.target);
-
-  if (!clickedInsideHelp && !clickedHelpButton) {
-    helpBox.classList.remove("open");
-  }
-});
 prevBtn.onclick = () => {
   if (step === 0 && item === 0) return;
 
@@ -1548,6 +1621,11 @@ prevBtn.onclick = () => {
 
 nextBtn.onclick = () => {
   const current = STEPS[step].items[item];
+
+  if (current.noticeRequired && !noticeConfirmed[getCurrentNoticeKey()]) {
+    openNoticeModal(current.noticeTitle, current.noticeHtml);
+    return;
+  }
 
   if (current.required) {
     done[`${step}-${item}`] = true;
@@ -1570,33 +1648,37 @@ nextBtn.onclick = () => {
   alert("수고하셨습니다! 가이드 확인이 완료되었습니다.");
 };
 
+noticeConfirmBtn.addEventListener("click", () => {
+  noticeConfirmed[getCurrentNoticeKey()] = true;
+  closeNoticeModal();
+  renderFooterState();
+});
+
 videoModalClose.addEventListener("click", closeVideoModal);
 videoModalDim.addEventListener("click", closeVideoModal);
+
+noticeModalClose.addEventListener("click", closeNoticeModal);
+noticeModalDim.addEventListener("click", closeNoticeModal);
+
+document.addEventListener("click", (event) => {
+  const clickedInsideHelp = helpBox.contains(event.target);
+  const clickedHelpButton = helpBtn.contains(event.target);
+
+  if (!clickedInsideHelp && !clickedHelpButton) {
+    helpBox.classList.remove("open");
+  }
+});
 
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
     helpBox.classList.remove("open");
     closeVideoModal();
+    closeNoticeModal();
   }
 });
 
 render();
 </script>
-<div class="notice-modal" id="noticeModal">
-  <div class="notice-modal-dim" id="noticeModalDim"></div>
 
-  <div class="notice-modal-dialog">
-    <div class="notice-modal-header">
-      <div class="notice-modal-title" id="noticeModalTitle">유의사항</div>
-      <button type="button" class="notice-modal-close" id="noticeModalClose">×</button>
-    </div>
-
-    <div class="notice-modal-body" id="noticeModalBody"></div>
-
-    <div class="notice-modal-footer">
-      <button type="button" class="btn btn-notice-confirm" id="noticeConfirmBtn">확인했어요</button>
-    </div>
-  </div>
-</div>
 </body>
 </html>
