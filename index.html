@@ -1676,12 +1676,13 @@ async function render() {
     videoPreview.classList.add("hidden");
   }
 
-  try {
-    left.innerHTML = await load(data.left);
-    fitInjectedSections();
-  } catch (e) {
-    left.innerHTML = `<div style="color:#ef4444;font-size:14px;">${e.message}</div>`;
-  }
+ try {
+  left.innerHTML = await load(data.left);
+  fitInjectedSections();
+  bindStepInlineActions();
+} catch (e) {
+  left.innerHTML = `<div style="color:#ef4444;font-size:14px;">${e.message}</div>`;
+}
 
   const inlineNoticeBtn = document.getElementById("openNoticeBtnInline");
   if (inlineNoticeBtn && data.noticeRequired) {
@@ -1773,6 +1774,26 @@ document.addEventListener("keydown", (event) => {
     closeNoticeModal();
   }
 });
+
+function bindStepInlineActions() {
+  const scope = left;
+
+  scope.querySelectorAll(".sku-btn").forEach(btn => {
+    btn.onclick = () => {
+      const modalId = btn.dataset.modal;
+      const modal = scope.querySelector(`#${modalId}`) || document.getElementById(modalId);
+      if (modal) modal.classList.add("show");
+    };
+  });
+
+  scope.querySelectorAll("[data-close]").forEach(btn => {
+    btn.onclick = () => {
+      const modalId = btn.dataset.close;
+      const modal = scope.querySelector(`#${modalId}`) || document.getElementById(modalId);
+      if (modal) modal.classList.remove("show");
+    };
+  });
+}
 
 render();
 </script>
