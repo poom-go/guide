@@ -1582,6 +1582,21 @@ document.addEventListener("keydown", (event) => {
 
 render();
 </script>
+<div class="notice-modal" id="noticeModal">
+  <div class="notice-modal-dim" id="noticeModalDim"></div>
 
+  <div class="notice-modal-dialog">
+    <div class="notice-modal-header">
+      <div class="notice-modal-title" id="noticeModalTitle">유의사항</div>
+      <button type="button" class="notice-modal-close" id="noticeModalClose">×</button>
+    </div>
+
+    <div class="notice-modal-body" id="noticeModalBody"></div>
+
+    <div class="notice-modal-footer">
+      <button type="button" class="btn btn-notice-confirm" id="noticeConfirmBtn">확인했어요</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
