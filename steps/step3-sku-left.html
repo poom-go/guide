@@ -176,14 +176,3 @@
 
 .example.bad li {text-decoration:line-through; opacity:0.8;}
 </style>
-
-<!-- ================= SCRIPT ================= -->
-<script>
-document.querySelectorAll(".sku-btn").forEach(btn=>{
-  btn.onclick=()=>document.getElementById(btn.dataset.modal).classList.add("show");
-});
-
-document.querySelectorAll("[data-close]").forEach(btn=>{
-  btn.onclick=()=>document.getElementById(btn.dataset.close).classList.remove("show");
-});
-</script>
