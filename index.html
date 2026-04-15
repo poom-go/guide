@@ -1,165 +1,185 @@
-<!-- Sidebar 부분만 교체해도 되지만, 그냥 통째로 주는게 안전함 -->
-<aside class="sidebar">
-  <div class="brand">
-    <img src="./guide/Primary Logo.png" alt="품고 나우 로고" />
-    <div class="brand-text">
-      <div class="title">품고 나우 가이드</div>
-      <div class="sub">System Manual</div>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>품고 나우 가이드</title>
+  <link rel="stylesheet" href="./assets/css/style.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="./assets/images/primary-logo.png" alt="품고 나우 로고" />
+        <div class="brand-text">
+          <div class="brand-title">품고 나우 가이드</div>
+          <div class="brand-sub">System Manual</div>
+        </div>
+      </div>
+
+      <div class="menu-label">메뉴</div>
+
+      <nav class="menu-group">
+        <div class="menu-item">
+          <button class="menu-button" type="button">
+            <div class="menu-button-left">
+              <span class="menu-title">SKU</span>
+            </div>
+            <span class="menu-arrow">▶</span>
+          </button>
+          <div class="submenu">
+            <a href="#" data-page="home">홈</a>
+            <a href="#" data-page="sku">SKU</a>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <button class="menu-button" type="button">
+            <div class="menu-button-left">
+              <span class="menu-title">재고</span>
+            </div>
+            <span class="menu-arrow">▶</span>
+          </button>
+          <div class="submenu">
+            <a href="#">SKU별재고조회</a>
+            <a href="#">재고 관리</a>
+            <a href="#">재고 변동내역</a>
+            <a href="#">재고 차감</a>
+            <a href="#">재고별 위치정보</a>
+            <a href="#">연동 재고 관리</a>
+            <a href="#">재고 변동 이력</a>
+            <a href="#">월별 재고 평가 현황</a>
+            <a href="#">SKU-일자별 출고 현황</a>
+            <a href="#">SKU별 입출고 현황</a>
+            <a href="#">월별 재고 수불부</a>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <button class="menu-button" type="button">
+            <div class="menu-button-left">
+              <span class="menu-title">입·출고</span>
+            </div>
+            <span class="menu-arrow">▶</span>
+          </button>
+          <div class="submenu">
+            <a href="#">입고요청서(구)</a>
+            <a href="#">입고요청서</a>
+            <a href="#">B2B 출고요청서(신)</a>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <button class="menu-button" type="button">
+            <div class="menu-button-left">
+              <span class="menu-title">(신)OMS</span>
+            </div>
+            <span class="menu-arrow">▶</span>
+          </button>
+          <div class="submenu">
+            <a href="#">판매처 연동 설정</a>
+            <a href="#">주문 흐름 제어</a>
+            <a href="#">연동 주문 조회</a>
+            <a href="#">수기 주문</a>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <button class="menu-button" type="button">
+            <div class="menu-button-left">
+              <span class="menu-title">주문</span>
+            </div>
+            <span class="menu-arrow">▶</span>
+          </button>
+          <div class="submenu">
+            <a href="#">원장 조회</a>
+            <a href="#">주문 처리</a>
+            <a href="#">판매처 계정</a>
+            <a href="#">캠페인</a>
+            <a href="#">상품</a>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <button class="menu-button" type="button">
+            <div class="menu-button-left">
+              <span class="menu-title">송장</span>
+            </div>
+            <span class="menu-arrow">▶</span>
+          </button>
+          <div class="submenu">
+            <a href="#">조회</a>
+            <a href="#">출고내역 다운로드</a>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <button class="menu-button" type="button">
+            <div class="menu-button-left">
+              <span class="menu-title">CS</span>
+            </div>
+            <span class="menu-arrow">▶</span>
+          </button>
+          <div class="submenu">
+            <a href="#">조회</a>
+            <a href="#">반출대장</a>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <button class="menu-button" type="button">
+            <div class="menu-button-left">
+              <span class="menu-title">트렌드</span>
+            </div>
+            <span class="menu-arrow">▶</span>
+          </button>
+          <div class="submenu">
+            <a href="#">생산 발주 예측</a>
+            <a href="#">출고 예정 SKU 현황</a>
+            <a href="#">출고 현황</a>
+            <a href="#">마감 현황</a>
+            <a href="#">SKU별 판매 현황</a>
+            <a href="#">판매처별 판매 현황</a>
+            <a href="#">일자별 판매 현황</a>
+            <a href="#">내품구성별 현황</a>
+            <a href="#">단포 합포 포당 평균</a>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <button class="menu-button" type="button">
+            <div class="menu-button-left">
+              <span class="menu-title">등록</span>
+            </div>
+            <span class="menu-arrow">▶</span>
+          </button>
+          <div class="submenu">
+            <a href="#">브랜드</a>
+            <a href="#">담당자 연락처</a>
+            <a href="#">구성원</a>
+            <a href="#">주소록</a>
+          </div>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <div class="main-inner">
+        <div id="content-area"></div>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modalTitle">안내</h3>
+        <button class="modal-close" id="modalClose" type="button">×</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
     </div>
   </div>
 
-  <div class="menu-label">메뉴</div>
-
-  <nav class="menu-group">
-
-    <!-- SKU -->
-    <div class="menu-item">
-      <button class="menu-button">
-        <div class="menu-button-left">
-          <span class="menu-title">SKU</span>
-        </div>
-        <span class="menu-arrow">▶</span>
-      </button>
-      <div class="submenu">
-        <a href="#">SKU</a>
-      </div>
-    </div>
-
-    <!-- 재고 -->
-    <div class="menu-item">
-      <button class="menu-button">
-        <div class="menu-button-left">
-          <span class="menu-title">재고</span>
-        </div>
-        <span class="menu-arrow">▶</span>
-      </button>
-      <div class="submenu">
-        <a href="#">SKU별재고조회</a>
-        <a href="#">재고 관리</a>
-        <a href="#">재고 변동내역</a>
-        <a href="#">재고 차감</a>
-        <a href="#">재고별 위치정보</a>
-        <a href="#">연동 재고 관리</a>
-        <a href="#">재고 변동 이력</a>
-        <a href="#">월별 재고 평가 현황</a>
-        <a href="#">SKU-일자별 출고 현황</a>
-        <a href="#">SKU별 입출고 현황</a>
-        <a href="#">월별 재고 수불부</a>
-      </div>
-    </div>
-
-    <!-- 입출고 -->
-    <div class="menu-item">
-      <button class="menu-button">
-        <div class="menu-button-left">
-          <span class="menu-title">입·출고</span>
-        </div>
-        <span class="menu-arrow">▶</span>
-      </button>
-      <div class="submenu">
-        <a href="#">입고요청서(구)</a>
-        <a href="#">입고요청서</a>
-        <a href="#">B2B 출고요청서(신)</a>
-      </div>
-    </div>
-
-    <!-- OMS -->
-    <div class="menu-item">
-      <button class="menu-button">
-        <div class="menu-button-left">
-          <span class="menu-title">(신)OMS</span>
-        </div>
-        <span class="menu-arrow">▶</span>
-      </button>
-      <div class="submenu">
-        <a href="#">판매처 연동 설정</a>
-        <a href="#">주문 흐름 제어</a>
-        <a href="#">연동 주문 조회</a>
-        <a href="#">수기 주문</a>
-      </div>
-    </div>
-
-    <!-- 주문 -->
-    <div class="menu-item">
-      <button class="menu-button">
-        <div class="menu-button-left">
-          <span class="menu-title">주문</span>
-        </div>
-        <span class="menu-arrow">▶</span>
-      </button>
-      <div class="submenu">
-        <a href="#">원장 조회</a>
-        <a href="#">주문 처리</a>
-        <a href="#">판매처 계정</a>
-        <a href="#">캠페인</a>
-        <a href="#">상품</a>
-      </div>
-    </div>
-
-    <!-- 송장 -->
-    <div class="menu-item">
-      <button class="menu-button">
-        <div class="menu-button-left">
-          <span class="menu-title">송장</span>
-        </div>
-        <span class="menu-arrow">▶</span>
-      </button>
-      <div class="submenu">
-        <a href="#">조회</a>
-        <a href="#">출고내역 다운로드</a>
-      </div>
-    </div>
-
-    <!-- CS -->
-    <div class="menu-item">
-      <button class="menu-button">
-        <div class="menu-button-left">
-          <span class="menu-title">CS</span>
-        </div>
-        <span class="menu-arrow">▶</span>
-      </button>
-      <div class="submenu">
-        <a href="#">조회</a>
-        <a href="#">반출대장</a>
-      </div>
-    </div>
-
-    <!-- 트렌드 -->
-    <div class="menu-item">
-      <button class="menu-button">
-        <div class="menu-button-left">
-          <span class="menu-title">트렌드</span>
-        </div>
-        <span class="menu-arrow">▶</span>
-      </button>
-      <div class="submenu">
-        <a href="#">생산 발주 예측</a>
-        <a href="#">출고 예정 SKU 현황</a>
-        <a href="#">출고 현황</a>
-        <a href="#">마감 현황</a>
-        <a href="#">SKU별 판매 현황</a>
-        <a href="#">판매처별 판매 현황</a>
-        <a href="#">일자별 판매 현황</a>
-        <a href="#">내품구성별 현황</a>
-        <a href="#">단포 합포 포당 평균</a>
-      </div>
-    </div>
-
-    <!-- 등록 -->
-    <div class="menu-item">
-      <button class="menu-button">
-        <div class="menu-button-left">
-          <span class="menu-title">등록</span>
-        </div>
-        <span class="menu-arrow">▶</span>
-      </button>
-      <div class="submenu">
-        <a href="#">브랜드</a>
-        <a href="#">담당자 연락처</a>
-        <a href="#">구성원</a>
-        <a href="#">주소록</a>
-      </div>
-    </div>
-
-  </nav>
-</aside>
+  <script src="./assets/js/app.js"></script>
+</body>
+</html>
