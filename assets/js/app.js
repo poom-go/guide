@@ -1,140 +1,242 @@
-const contentArea = document.getElementById("content-area");
-const modalOverlay = document.getElementById("modalOverlay");
-const modalTitle = document.getElementById("modalTitle");
-const modalBody = document.getElementById("modalBody");
-const modalClose = document.getElementById("modalClose");
+(function () {
+  const registryConfig = window.PAGE_REGISTRY || { defaultPageKey: "home", pages: {} };
+  const pages = registryConfig.pages || {};
 
-const modalContents = {
-  notice: {
-    title: "유의사항",
-    body: `
-      <div class="notice-box">
-        <p>
-N배송으로 출고되는 상품(SKU)은 품고 시스템이 아닌 스마트스토어를 통해 등록해야 합니다.
-해당 화면에서 SKU 추가 버튼이 노출되더라도 스마트스토어 연동 등록에는 반영되지 않으므로, 실제 등록 용도로는 사용할 수 없는 기능으로 이해해 주세요.
-        </p>
-      </div>
-      <p>
-즉, N배송 운영 SKU는 품고 내 직접 등록이 아니라 판매처 기준으로 먼저 생성 및 연동되는 구조입니다.
-등록이 필요한 경우 스마트스토어에서 먼저 생성한 뒤 연동 상태를 확인해 주세요.
-      </p>
-    `
-  },
-  rename: {
-    title: "SKU명 수정",
-    body: `
-      <div class="notice-box">
-        <div class="sub-title">[초도입고 전]</div>
-        <p>
-스마트스토어에 등록된 SKU명의 수정이 필요한 경우, 품고 시스템에서 수정 시 반영될 수 있습니다.
-다만 타 풀필먼트를 통해 출고된 SKU는 품고에서 수정하더라도 스마트스토어에 반영되지 않을 수 있으므로, 해당 건은 네이버 직계약 물류지원센터를 통해 수정 요청해 주세요.
-        </p>
-      </div>
+  const contentArea = document.getElementById("content-area");
+  const sidebarRoot = document.querySelector(".menu-group");
 
-      <div class="notice-box">
-        <div class="sub-title">[초도 입고 후]</div>
-        <p>
-품고에 한 번이라도 입고된 SKU의 경우, 품고 시스템에서 SKU명을 수정하더라도 스마트스토어에는 반영되지 않습니다.
-이 경우 수정된 명칭은 품고 전산 내에서만 변경되어 노출됩니다.
-        </p>
-      </div>
-    `
-  },
-  obsolete: {
-    title: "불용 처리 방법",
-    body: `
-      <div class="notice-box">
-        <p>
-더 이상 품고에서 운영하지 않는 SKU는 반드시 불용 처리해 주셔야 합니다.
-불용 처리가 되지 않을 경우 시스템상 추가 입고 예정 SKU로 인식되어 CELL 보관료가 계속 청구될 수 있습니다.
-        </p>
-      </div>
-      <p>
-추가 입고 계획이 없는 SKU는 운영 종료 시점에 맞춰 반드시 불용 처리해 주세요.
-불필요한 보관료 발생 방지를 위해 정기적으로 SKU 운영 상태를 점검하는 것을 권장드립니다.
-      </p>
-    `
+  function escapeHtml(value = "") {
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
   }
-};
 
-function bindSidebarToggle() {
-  const menuItems = document.querySelectorAll(".menu-item");
+  function getSidebarLinkInfo(link) {
+    const title = (link.textContent || "").trim();
+    const menuItem = link.closest(".menu-item");
+    const section = (menuItem?.querySelector(".menu-title")?.textContent || "").trim() || "가이드";
 
-  menuItems.forEach((item) => {
-    const button = item.querySelector(".menu-button");
-    const submenu = item.querySelector(".submenu");
+    return { title, section };
+  }
 
-    button.addEventListener("click", () => {
-      const isOpen = item.classList.contains("open");
+  function registerSidebarFallbackPages() {
+    if (!sidebarRoot) return;
 
-      menuItems.forEach((otherItem) => {
-        otherItem.classList.remove("open");
-        const otherSubmenu = otherItem.querySelector(".submenu");
-        if (otherSubmenu) otherSubmenu.style.maxHeight = null;
-      });
+    const sidebarLinks = sidebarRoot.querySelectorAll(".submenu a[data-page]");
 
-      if (!isOpen) {
-        item.classList.add("open");
-        submenu.style.maxHeight = submenu.scrollHeight + "px";
+    sidebarLinks.forEach((link) => {
+      const pageKey = link.dataset.page;
+      if (!pageKey || pages[pageKey]) return;
+
+      const { title, section } = getSidebarLinkInfo(link);
+
+      pages[pageKey] = {
+        title,
+        section,
+        mode: "inline",
+        description: "상세 문서가 아직 연결되지 않은 메뉴입니다.",
+        html: `
+          <div class="guide-placeholder-page">
+            <div class="guide-section">
+              <h2>${escapeHtml(title)}</h2>
+              <p>
+                현재 이 메뉴는 사이드바 구조와 순서를 유지하기 위해 먼저 연결만 된 상태입니다.
+                상세 안내가 준비되면 별도 HTML 파일을 만들고
+                <span class="guide-inline-code">page.registry.js</span>에 경로만 추가하면 됩니다.
+              </p>
+            </div>
+
+            <div class="guide-section">
+              <h3>다음 작업 추천</h3>
+              <ul class="guide-list">
+                <li>이 메뉴 전용 partial 파일 생성</li>
+                <li>이미지/표/단계 설명이 있으면 HTML로 분리</li>
+                <li>registry에서 inline → partial 방식으로 전환</li>
+              </ul>
+            </div>
+          </div>
+        `
+      };
+    });
+  }
+
+  function buildBreadcrumb(page) {
+    return `홈 / ${escapeHtml(page.section || "가이드")} / ${escapeHtml(page.title || "")}`;
+  }
+
+  function buildCards(cards = []) {
+    if (!cards.length) return "";
+
+    return `
+      <div class="guide-card-grid">
+        ${cards
+          .map(
+            (card) => `
+            <a href="#" class="guide-card" data-page="${escapeHtml(card.key)}">
+              <h3 class="guide-card-title">${escapeHtml(card.title)}</h3>
+              <p class="guide-card-summary">${escapeHtml(card.summary || "")}</p>
+            </a>
+          `
+          )
+          .join("")}
+      </div>
+    `;
+  }
+
+  function buildShell(page, bodyHtml) {
+    return `
+      <section class="guide-shell">
+        <div class="guide-header">
+          <div class="guide-breadcrumb">${buildBreadcrumb(page)}</div>
+          <h1 class="guide-title">${escapeHtml(page.title || "")}</h1>
+          ${page.description ? `<p class="guide-description">${escapeHtml(page.description)}</p>` : ""}
+        </div>
+        <div class="guide-body">
+          ${bodyHtml}
+        </div>
+      </section>
+    `;
+  }
+
+  function buildErrorPage(message) {
+    return `
+      <section class="guide-shell">
+        <div class="guide-header">
+          <div class="guide-breadcrumb">오류</div>
+          <h1 class="guide-title">페이지를 불러올 수 없습니다</h1>
+          <p class="guide-description">${escapeHtml(message)}</p>
+        </div>
+      </section>
+    `;
+  }
+
+  async function loadPageBody(page) {
+    if (page.mode === "inline") {
+      return page.html || "";
+    }
+
+    if (page.mode === "partial" && page.path) {
+      const response = await fetch(page.path);
+      if (!response.ok) {
+        throw new Error(`파일 로드 실패: ${page.path}`);
       }
+      return await response.text();
+    }
+
+    return `
+      <div class="guide-section">
+        <p>페이지 본문이 아직 설정되지 않았습니다.</p>
+      </div>
+    `;
+  }
+
+  function updateActiveMenu(pageKey) {
+    if (!sidebarRoot) return;
+
+    sidebarRoot.querySelectorAll(".submenu a").forEach((link) => {
+      link.classList.toggle("is-active", link.dataset.page === pageKey);
     });
-  });
-}
 
-async function loadPage(pageName) {
-  const response = await fetch(`./pages/${pageName}.html`);
-  const html = await response.text();
-  contentArea.innerHTML = html;
-  bindDynamicEvents();
-}
+    const activeLink = sidebarRoot.querySelector(`.submenu a[data-page="${pageKey}"]`);
 
-function setActiveMenu(target) {
-  document.querySelectorAll(".submenu a").forEach((a) => a.classList.remove("active"));
-  if (target) target.classList.add("active");
-}
+    if (activeLink) {
+      const parentMenuItem = activeLink.closest(".menu-item");
+      if (parentMenuItem) {
+        parentMenuItem.classList.add("is-open");
+        const button = parentMenuItem.querySelector(".menu-button");
+        if (button) button.setAttribute("aria-expanded", "true");
+      }
+    }
+  }
 
-function openModal(key) {
-  const data = modalContents[key];
-  if (!data) return;
+  function setHash(pageKey) {
+    const nextHash = `#/${pageKey}`;
+    if (window.location.hash !== nextHash) {
+      window.location.hash = nextHash;
+    }
+  }
 
-  modalTitle.textContent = data.title;
-  modalBody.innerHTML = data.body;
-  modalOverlay.classList.add("show");
-}
+  async function renderPage(requestedPageKey, options = {}) {
+    const { updateHash = true } = options;
+    const fallbackKey = registryConfig.defaultPageKey || "home";
+    const resolvedKey = pages[requestedPageKey] ? requestedPageKey : fallbackKey;
+    const page = pages[resolvedKey];
 
-function closeModal() {
-  modalOverlay.classList.remove("show");
-}
+    if (!page) {
+      contentArea.innerHTML = buildErrorPage("기본 페이지 설정을 확인해주세요.");
+      return;
+    }
 
-function bindDynamicEvents() {
-  document.querySelectorAll("[data-modal]").forEach((button) => {
-    button.addEventListener("click", () => {
-      openModal(button.dataset.modal);
+    try {
+      let bodyHtml = await loadPageBody(page);
+
+      if (page.type === "hub") {
+        bodyHtml += buildCards(page.cards || []);
+      }
+
+      contentArea.innerHTML = buildShell(page, bodyHtml);
+      updateActiveMenu(resolvedKey);
+
+      if (updateHash) {
+        setHash(resolvedKey);
+      }
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (error) {
+      console.error(error);
+      contentArea.innerHTML = buildErrorPage("페이지 파일 경로 또는 파일 존재 여부를 확인해주세요.");
+    }
+  }
+
+  function handleMenuToggle(button) {
+    const menuItem = button.closest(".menu-item");
+    if (!menuItem) return;
+
+    const isOpen = menuItem.classList.toggle("is-open");
+    button.setAttribute("aria-expanded", String(isOpen));
+  }
+
+  function handleDocumentClick(event) {
+    const pageLink = event.target.closest("[data-page]");
+    if (pageLink) {
+      event.preventDefault();
+      const pageKey = pageLink.dataset.page;
+      renderPage(pageKey);
+      return;
+    }
+
+    const menuButton = event.target.closest(".menu-button");
+    if (menuButton) {
+      handleMenuToggle(menuButton);
+    }
+  }
+
+  function readHashPageKey() {
+    return window.location.hash.replace(/^#\//, "").trim() || registryConfig.defaultPageKey || "home";
+  }
+
+  function onHashChange() {
+    renderPage(readHashPageKey(), { updateHash: false });
+  }
+
+  function initMenuState() {
+    document.querySelectorAll(".menu-button").forEach((button) => {
+      const menuItem = button.closest(".menu-item");
+      const isOpen = menuItem?.classList.contains("is-open") || false;
+      button.setAttribute("aria-expanded", String(isOpen));
     });
-  });
-}
+  }
 
-function bindPageLinks() {
-  document.querySelectorAll(".submenu a[data-page]").forEach((link) => {
-    link.addEventListener("click", async (e) => {
-      e.preventDefault();
-      const pageName = link.dataset.page;
-      setActiveMenu(link);
-      await loadPage(pageName);
-    });
-  });
-}
+  function init() {
+    registerSidebarFallbackPages();
+    initMenuState();
+    document.addEventListener("click", handleDocumentClick);
+    window.addEventListener("hashchange", onHashChange);
+    onHashChange();
+  }
 
-modalClose.addEventListener("click", closeModal);
-
-modalOverlay.addEventListener("click", (e) => {
-  if (e.target === modalOverlay) closeModal();
-});
-
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") closeModal();
-});
-
-bindSidebarToggle();
-bindPageLinks();
-loadPage("home");
+  document.addEventListener("DOMContentLoaded", init);
+})();
