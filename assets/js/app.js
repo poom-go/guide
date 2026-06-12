@@ -66,7 +66,11 @@
     });
   }
 
-  function buildBreadcrumb(page) {
+  function buildBreadcrumb(pageKey, page) {
+    if (pageKey === "home") return "홈";
+    if (!page.section || page.section === page.title) {
+      return `홈 / ${escapeHtml(page.title || "")}`;
+    }
     return `홈 / ${escapeHtml(page.section || "가이드")} / ${escapeHtml(page.title || "")}`;
   }
 
@@ -89,11 +93,11 @@
     `;
   }
 
-  function buildShell(page, bodyHtml) {
+  function buildShell(pageKey, page, bodyHtml) {
     return `
       <section class="guide-shell">
         <div class="guide-header">
-          <div class="guide-breadcrumb">${buildBreadcrumb(page)}</div>
+          <div class="guide-breadcrumb">${buildBreadcrumb(pageKey, page)}</div>
           <h1 class="guide-title">${escapeHtml(page.title || "")}</h1>
           ${page.description ? `<p class="guide-description">${escapeHtml(page.description)}</p>` : ""}
         </div>
@@ -190,7 +194,7 @@
         bodyHtml += buildCards(page.cards || []);
       }
 
-      contentArea.innerHTML = buildShell(page, bodyHtml);
+      contentArea.innerHTML = buildShell(resolvedKey, page, bodyHtml);
       updateActiveMenu(resolvedKey);
 
       if (updateHash) {
