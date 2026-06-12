@@ -5,6 +5,209 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>품고 나우 가이드</title>
   <link rel="stylesheet" href="./assets/css/style.css" />
+
+  <!-- 추가 스타일: 기존 style.css를 해치지 않도록 가이드 본문 관련 스타일만 보강 -->
+  <style>
+    .guide-shell {
+      width: 100%;
+    }
+
+    .guide-breadcrumb {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 10px;
+    }
+
+    .guide-header {
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .guide-title {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1.3;
+      color: #111827;
+    }
+
+    .guide-description {
+      margin: 10px 0 0;
+      color: #6b7280;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .guide-body {
+      color: #111827;
+      line-height: 1.8;
+      font-size: 15px;
+    }
+
+    .guide-section + .guide-section {
+      margin-top: 28px;
+    }
+
+    .guide-section h2 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .guide-section h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #1f2937;
+    }
+
+    .guide-note {
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      color: #334155;
+      margin: 16px 0;
+    }
+
+    .guide-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .guide-card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      padding: 20px;
+      border-radius: 16px;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+
+    .guide-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+      border-color: #cbd5e1;
+    }
+
+    .guide-card-title {
+      margin: 0 0 8px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .guide-card-summary {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.7;
+      color: #64748b;
+    }
+
+    .guide-list,
+    .guide-step-list {
+      margin: 10px 0 0;
+      padding-left: 20px;
+    }
+
+    .guide-list li,
+    .guide-step-list li {
+      margin: 6px 0;
+    }
+
+    .guide-figure {
+      margin: 18px 0 24px;
+    }
+
+    .guide-image-placeholder {
+      width: 100%;
+      min-height: 240px;
+      border: 1px dashed #cbd5e1;
+      border-radius: 16px;
+      background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .guide-caption {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    .guide-table-wrap {
+      overflow-x: auto;
+      margin-top: 14px;
+    }
+
+    .guide-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 560px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+    }
+
+    .guide-table th,
+    .guide-table td {
+      padding: 12px 14px;
+      border: 1px solid #e5e7eb;
+      text-align: left;
+      vertical-align: top;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .guide-table th {
+      background: #f8fafc;
+      font-weight: 700;
+      color: #1f2937;
+    }
+
+    .guide-placeholder-page {
+      padding: 4px 0;
+    }
+
+    .guide-inline-code {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      font-size: 13px;
+      color: #334155;
+    }
+
+    .submenu a.is-active {
+      font-weight: 700;
+    }
+
+    .menu-item.is-open .submenu {
+      display: block;
+    }
+
+    @media (max-width: 960px) {
+      .guide-title {
+        font-size: 24px;
+      }
+
+      .guide-card-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="layout">
@@ -41,17 +244,17 @@
             <span class="menu-arrow">▶</span>
           </button>
           <div class="submenu">
-            <a href="#">SKU별재고조회</a>
-            <a href="#">재고 관리</a>
-            <a href="#">재고 변동내역</a>
-            <a href="#">재고 차감</a>
-            <a href="#">재고별 위치정보</a>
-            <a href="#">연동 재고 관리</a>
-            <a href="#">재고 변동 이력</a>
-            <a href="#">월별 재고 평가 현황</a>
-            <a href="#">SKU-일자별 출고 현황</a>
-            <a href="#">SKU별 입출고 현황</a>
-            <a href="#">월별 재고 수불부</a>
+            <a href="#" data-page="stock-by-sku">SKU별재고조회</a>
+            <a href="#" data-page="stock-manage">재고 관리</a>
+            <a href="#" data-page="stock-change-history">재고 변동내역</a>
+            <a href="#" data-page="stock-deduction">재고 차감</a>
+            <a href="#" data-page="stock-location-info">재고별 위치정보</a>
+            <a href="#" data-page="integrated-stock-manage">연동 재고 관리</a>
+            <a href="#" data-page="stock-change-log">재고 변동 이력</a>
+            <a href="#" data-page="monthly-stock-valuation">월별 재고 평가 현황</a>
+            <a href="#" data-page="sku-daily-release-status">SKU-일자별 출고 현황</a>
+            <a href="#" data-page="sku-io-status">SKU별 입출고 현황</a>
+            <a href="#" data-page="monthly-stock-ledger">월별 재고 수불부</a>
           </div>
         </div>
 
@@ -63,9 +266,9 @@
             <span class="menu-arrow">▶</span>
           </button>
           <div class="submenu">
-            <a href="#">입고요청서(구)</a>
-            <a href="#">입고요청서</a>
-            <a href="#">B2B 출고요청서(신)</a>
+            <a href="#" data-page="inbound-request-old">입고요청서(구)</a>
+            <a href="#" data-page="inbound-request">입고요청서</a>
+            <a href="#" data-page="b2b-outbound-request-new">B2B 출고요청서(신)</a>
           </div>
         </div>
 
@@ -77,10 +280,10 @@
             <span class="menu-arrow">▶</span>
           </button>
           <div class="submenu">
-            <a href="#">판매처 연동 설정</a>
-            <a href="#">주문 흐름 제어</a>
-            <a href="#">연동 주문 조회</a>
-            <a href="#">수기 주문</a>
+            <a href="#" data-page="sales-channel-sync-setting">판매처 연동 설정</a>
+            <a href="#" data-page="order-flow-control">주문 흐름 제어</a>
+            <a href="#" data-page="linked-order-search">연동 주문 조회</a>
+            <a href="#" data-page="manual-order">수기 주문</a>
           </div>
         </div>
 
@@ -92,11 +295,11 @@
             <span class="menu-arrow">▶</span>
           </button>
           <div class="submenu">
-            <a href="#">원장 조회</a>
-            <a href="#">주문 처리</a>
-            <a href="#">판매처 계정</a>
-            <a href="#">캠페인</a>
-            <a href="#">상품</a>
+            <a href="#" data-page="order-ledger-search">원장 조회</a>
+            <a href="#" data-page="order-processing">주문 처리</a>
+            <a href="#" data-page="sales-channel-account">판매처 계정</a>
+            <a href="#" data-page="campaign">캠페인</a>
+            <a href="#" data-page="product">상품</a>
           </div>
         </div>
 
@@ -108,8 +311,8 @@
             <span class="menu-arrow">▶</span>
           </button>
           <div class="submenu">
-            <a href="#">조회</a>
-            <a href="#">출고내역 다운로드</a>
+            <a href="#" data-page="invoice-search">조회</a>
+            <a href="#" data-page="outbound-history-download">출고내역 다운로드</a>
           </div>
         </div>
 
@@ -121,8 +324,8 @@
             <span class="menu-arrow">▶</span>
           </button>
           <div class="submenu">
-            <a href="#">조회</a>
-            <a href="#">반출대장</a>
+            <a href="#" data-page="cs-search">조회</a>
+            <a href="#" data-page="return-out-ledger">반출대장</a>
           </div>
         </div>
 
@@ -134,15 +337,15 @@
             <span class="menu-arrow">▶</span>
           </button>
           <div class="submenu">
-            <a href="#">생산 발주 예측</a>
-            <a href="#">출고 예정 SKU 현황</a>
-            <a href="#">출고 현황</a>
-            <a href="#">마감 현황</a>
-            <a href="#">SKU별 판매 현황</a>
-            <a href="#">판매처별 판매 현황</a>
-            <a href="#">일자별 판매 현황</a>
-            <a href="#">내품구성별 현황</a>
-            <a href="#">단포 합포 포당 평균</a>
+            <a href="#" data-page="production-order-forecast">생산 발주 예측</a>
+            <a href="#" data-page="expected-outbound-sku-status">출고 예정 SKU 현황</a>
+            <a href="#" data-page="outbound-status">출고 현황</a>
+            <a href="#" data-page="closing-status">마감 현황</a>
+            <a href="#" data-page="sku-sales-status">SKU별 판매 현황</a>
+            <a href="#" data-page="sales-channel-sales-status">판매처별 판매 현황</a>
+            <a href="#" data-page="daily-sales-status">일자별 판매 현황</a>
+            <a href="#" data-page="bundle-composition-status">내품구성별 현황</a>
+            <a href="#" data-page="avg-per-box">단포 합포 포당 평균</a>
           </div>
         </div>
 
@@ -154,10 +357,10 @@
             <span class="menu-arrow">▶</span>
           </button>
           <div class="submenu">
-            <a href="#">브랜드</a>
-            <a href="#">담당자 연락처</a>
-            <a href="#">구성원</a>
-            <a href="#">주소록</a>
+            <a href="#" data-page="brand">브랜드</a>
+            <a href="#" data-page="contact-person">담당자 연락처</a>
+            <a href="#" data-page="members">구성원</a>
+            <a href="#" data-page="address-book">주소록</a>
           </div>
         </div>
       </nav>
@@ -180,6 +383,7 @@
     </div>
   </div>
 
+  <script src="./assets/js/page.registry.js"></script>
   <script src="./assets/js/app.js"></script>
 </body>
 </html>
