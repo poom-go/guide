@@ -11,7 +11,7 @@ body {
 body {
   font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
   color: #111827;
-  background: #f3f5f8;
+  background: #f5f7fb;
 }
 
 a {
@@ -35,11 +35,12 @@ button {
 /* sidebar */
 .sidebar {
   width: 320px;
-  background: #0f172a;
-  color: #ffffff;
+  background: #ffffff;
+  color: #111827;
   padding: 28px 20px;
   flex-shrink: 0;
   overflow-y: auto;
+  border-right: 1px solid #e5e7eb;
 }
 
 .brand {
@@ -54,26 +55,43 @@ button {
   height: 44px;
   object-fit: contain;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.08);
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
   padding: 6px;
 }
 
-.brand-title {
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.brand-title-link {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  cursor: pointer;
   font-size: 18px;
   font-weight: 800;
   line-height: 1.3;
+  color: #111827;
+}
+
+.brand-title-link:hover {
+  color: #2563eb;
 }
 
 .brand-sub {
-  margin-top: 2px;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.65);
+  color: #6b7280;
 }
 
 .menu-label {
   margin-bottom: 14px;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.55);
+  color: #94a3b8;
   letter-spacing: 0.04em;
 }
 
@@ -85,14 +103,15 @@ button {
 
 .menu-item {
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.03);
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
 }
 
 .menu-button {
   width: 100%;
   border: 0;
   background: transparent;
-  color: #ffffff;
+  color: #111827;
   padding: 14px 14px;
   display: flex;
   align-items: center;
@@ -103,7 +122,7 @@ button {
 }
 
 .menu-button:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: #f8fafc;
 }
 
 .menu-button-left {
@@ -119,7 +138,7 @@ button {
 
 .menu-arrow {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.72);
+  color: #64748b;
   transition: transform 0.2s ease;
 }
 
@@ -139,7 +158,7 @@ button {
 .submenu a {
   display: block;
   text-decoration: none;
-  color: #dbe3f0;
+  color: #475569;
   font-size: 14px;
   line-height: 1.5;
   padding: 9px 12px;
@@ -148,8 +167,8 @@ button {
 }
 
 .submenu a:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #ffffff;
+  background: #f1f5f9;
+  color: #111827;
 }
 
 .submenu a.is-active {
@@ -275,7 +294,7 @@ button {
 /* cards */
 .guide-card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
   margin-top: 24px;
 }
@@ -452,6 +471,10 @@ button {
 
   .guide-shell {
     padding: 28px;
+  }
+
+  .guide-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
